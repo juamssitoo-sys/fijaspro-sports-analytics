@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FijasPro — Kinetic Telemetry Sports Analytics</title>
+  <meta name="description" content="Plataforma de analítica deportiva inteligente, telemetría cuantitativa y modelos predictivos verificados para Fútbol, NBA y Esports.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#FFB4A1',
+            'on-primary': '#611300',
+            'primary-container': '#FF5628',
+            'on-primary-container': '#540F00',
+            'secondary': '#43FFBB',
+            'on-secondary': '#003825',
+            'secondary-container': '#00E2A0',
+            'on-secondary-container': '#005F41',
+            'tertiary': '#7BD0FF',
+            'on-tertiary': '#00354A',
+            'tertiary-container': '#009BD1',
+            'on-tertiary-container': '#002D40',
+            'success': '#43FFBB',
+            'on-success': '#003825',
+            'warning': '#FBBF24',
+            'on-warning': '#3B2600',
+            'error': '#FFB4AB',
+            'on-error': '#690005',
+            'error-container': '#93000A',
+            'on-error-container': '#FFDAD6',
+            'background': '#111318',
+            'on-background': '#E2E2E9',
+            'surface': '#111318',
+            'surface-dim': '#111318',
+            'surface-bright': '#37393F',
+            'surface-container-lowest': '#0C0E13',
+            'surface-container-low': '#1A1B21',
+            'surface-container': '#1E2025',
+            'surface-container-high': '#282A2F',
+            'surface-container-highest': '#33353A',
+            'on-surface': '#E2E2E9',
+            'on-surface-variant': '#AAABB2',
+            'outline': '#5D5E64',
+            'outline-variant': '#2E3036',
+          },
+          fontFamily: {
+            'headline': ['"Mulish"', 'sans-serif'],
+            'body': ['"Instrument Sans"', 'sans-serif'],
+            'label': ['"Instrument Sans"', 'sans-serif'],
+            'mono': ['"Spline Sans Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Mulish:wght@700;800;900&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+
+  <style>
+    .material-symbols-outlined {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      overflow: hidden;
+      vertical-align: middle;
+    }
+    /* Smooth transitions */
+    .view-section {
+      transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+    .view-section.hidden {
+      display: none;
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #111318;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2E3036;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #5D5E64;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+
+  <div class="flex-1 flex">
+    <!-- Desktop Left Navigation Rail -->
+    <aside class="hidden lg:flex w-64 shrink-0 min-h-screen bg-surface-container-lowest border-r border-outline-variant flex-col justify-between p-6 sticky top-0 self-start z-30">
+      <div class="flex flex-col gap-8">
+        <!-- Logo Brand -->
+        <a href="#inicio" onclick="switchTab('inicio')" class="flex items-center gap-3 group focus:outline-none">
+          <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0 shadow-lg shadow-primary-container/20 group-hover:scale-105 transition-transform">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 18L10 6L14 13L20 4" stroke="#540F00" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="20" cy="4" r="2.25" fill="#540F00"></circle>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-headline text-xl font-extrabold text-on-surface tracking-tight">FijasPro</span>
+            <span class="font-mono text-xs text-on-surface-variant uppercase tracking-wider">Telemetry Lab</span>
+          </div>
+        </a>
+
+        <!-- Main Nav -->
+        <nav class="flex flex-col gap-1.5" id="desktop-nav">
+          <button onclick="switchTab('inicio')" id="nav-btn-inicio" class="nav-item active flex items-center justify-between px-3.5 py-3 rounded-md bg-surface-container-high text-on-surface border border-outline-variant font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">home</span>
+              <span class="font-label text-sm">Inicio</span>
+            </span>
+            <span class="font-mono text-xs text-secondary tabular-nums">LIVE</span>
+          </button>
+          
+          <button onclick="switchTab('futbol')" id="nav-btn-futbol" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">sports_soccer</span>
+              <span class="font-label text-sm">Fútbol</span>
+            </span>
+            <span class="font-mono text-xs text-secondary tabular-nums font-semibold">UCL & Lib</span>
+          </button>
+
+          <button onclick="switchTab('nba')" id="nav-btn-nba" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">sports_basketball</span>
+              <span class="font-label text-sm">NBA</span>
+            </span>
+            <span class="font-mono text-xs text-on-surface-variant tabular-nums">4</span>
+          </button>
+
+          <button onclick="switchTab('esports')" id="nav-btn-esports" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">sports_esports</span>
+              <span class="font-label text-sm">Esports</span>
+            </span>
+            <span class="font-mono text-xs text-tertiary tabular-nums">CS2 / VCT</span>
+          </button>
+
+          <div class="my-2 border-t border-outline-variant"></div>
+
+          <button onclick="switchTab('analisis')" id="nav-btn-analisis" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="material-symbols-outlined text-xl">neurology</span>
+            <span class="font-label text-sm">Modelo Cuantitativo</span>
+          </button>
+
+          <button onclick="switchTab('pronosticos')" id="nav-btn-pronosticos" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="material-symbols-outlined text-xl">fact_check</span>
+            <span class="font-label text-sm">Pronósticos Auditados</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Live Engine Status Badge -->
+      <div class="bg-surface-container-low border border-outline-variant rounded-lg p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
+            <span class="font-mono text-xs text-secondary font-bold uppercase tracking-wider">Engine v4.2 Online</span>
+          </div>
+          <span class="font-mono text-[10px] text-on-surface-variant">99.8% Lat</span>
+        </div>
+        <p class="font-body text-xs text-on-surface-variant leading-relaxed">
+          Estadísticas deportivas verificadas separadas de estimaciones. Cero cuotas, 100% analítica de rendimiento.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Top Utility Header -->
+      <header class="h-16 px-4 lg:px-8 border-b border-outline-variant bg-surface-container-lowest/90 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <!-- Mobile Menu Toggle Button -->
+          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface">
+            <span class="material-symbols-outlined text-2xl">menu</span>
+          </button>
+          
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-xs font-semibold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+              En Vivo
+            </span>
+            <span class="hidden sm:inline font-mono text-xs text-on-surface-variant">
+              Telemetría activa · 2026 Season
+            </span>
+          </div>
+        </div>
+
+        <!-- Quick Action Toolbar -->
+        <div class="flex items-center gap-3">
+          <div class="relative hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-lg">search</span>
+            <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar equipo o jugador..." class="bg-surface-container-high border border-outline-variant text-xs text-on-surface rounded-md pl-9 pr-4 py-2 w-56 focus:outline-none focus:border-primary">
+          </div>
+
+          <button onclick="openModalMatch('final-libertadores')" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold transition-transform hover:scale-105 active:scale-95 shadow-md shadow-primary-container/20">
+            <span class="material-symbols-outlined text-base">sports_soccer</span>
+            <span>Final Libertadores 2026</span>
+          </button>
+
+          <button onclick="openModalAnalyze()" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-on-surface border border-outline-variant hover:bg-surface-container-highest text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined text-base text-primary">analytics</span>
+            <span class="hidden sm:inline">Analizador xG</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER -->
+      <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto flex flex-col gap-8">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 1: INICIO (HOME TELEMETRY DASHBOARD) -->
+        <!-- ========================================== -->
+        <div id="view-inicio" class="view-section flex flex-col gap-8">
+          <!-- Hero Banner -->
+          <section class="relative rounded-xl overflow-hidden border border-outline-variant bg-surface-container-lowest p-6 lg:p-10 shadow-2xl">
+            <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/90 to-surface-container-low opacity-95"></div>
+            
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div class="lg:col-span-7 flex flex-col gap-4">
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <span class="px-2.5 py-1 rounded bg-tertiary/15 text-tertiary border border-tertiary/30 text-[11px] font-mono uppercase tracking-wider font-bold">
+                    Telemetry Lab v4.2
+                  </span>
+                  <span class="text-xs font-mono text-on-surface-variant">FÚTBOL · NBA · VALORANT · CS2</span>
+                </div>
+
+                <h1 class="font-headline text-3xl lg:text-5xl font-black text-on-surface leading-tight tracking-tight">
+                  Donde la pasión deportiva encuentra la <span class="text-primary underline decoration-primary-container decoration-wavy decoration-2">precisión cuantitativa</span>.
+                </h1>
+
+                <p class="font-body text-sm lg:text-base text-on-surface-variant max-w-2xl leading-relaxed">
+                  Datos reales verificados, mapas de calor, expected goals (xG), probabilidades de victoria y analítica pura para la <strong>UEFA Champions League</strong> y la gran final de la <strong>Copa Libertadores 2026</strong>.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3 pt-2">
+                  <button onclick="switchTab('futbol')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold tracking-wide hover:bg-primary transition-all">
+                    <span class="material-symbols-outlined text-lg">bolt</span>
+                    <span>Explorar Fútbol 2026</span>
+                  </button>
+                  <button onclick="switchTab('nba')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-surface-container-high text-on-surface border border-outline-variant text-xs font-semibold hover:bg-surface-container-highest transition-colors">
+                    <span class="material-symbols-outlined text-lg">sports_basketball</span>
+                    <span>Ver Métricas NBA</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Key Metrics Card (Right Column) -->
+              <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
+                  <span class="text-xs font-mono text-on-surface-variant uppercase">Champions League</span>
+                  <span class="font-headline text-2xl font-extrabold text-secondary tabular-nums">36 Clubes</span>
+                  <span class="text-[11px] text-on-surface-variant">144 partidos completados</span>
+                </div>
+                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
+                  <span class="text-xs font-mono text-on-surface-variant uppercase">Final Libertadores 2026</span>
+                  <span class="font-headline text-2xl font-extrabold text-primary tabular-nums">Palmeiras vs EDLP</span>
+                  <span class="text-[11px] text-secondary font-medium">Gran Final Definitoria</span>
+                </div>
+                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
+                  <span class="text-xs font-mono text-on-surface-variant uppercase">Efectividad Modelo v4.2</span>
+                  <span class="font-headline text-2xl font-extrabold text-tertiary tabular-nums">78.4%</span>
+                  <span class="text-[11px] text-on-surface-variant">Confiabilidad xG / xA</span>
+                </div>
+                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
+                  <span class="text-xs font-mono text-on-surface-variant uppercase">Goles / Partido UCL</span>
+                  <span class="font-headline text-2xl font-extrabold text-warning tabular-nums">3.26</span>
+                  <span class="text-[11px] text-on-surface-variant">470 goles en 144 PJ</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Top Events Section -->
+          <section class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="font-headline text-xl font-bold text-on-surface">Eventos Destacados de Análisis</h2>
+                <p class="font-body text-xs text-on-surface-variant">Modelos predictivos en tiempo real con intervalos de confianza</p>
+              </div>
+              <span class="font-mono text-xs text-secondary font-medium">Actualizado: Hoy · En línea</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Event 1: Final Libertadores -->
+              <div onclick="openModalMatch('final-libertadores')" class="bg-surface-container border border-outline-variant hover:border-primary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 text-[10px] font-mono font-bold uppercase">Copa Libertadores 2026</span>
+                  <span class="text-xs font-mono text-secondary font-semibold">GRAN FINAL</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">SE Palmeiras</span>
+                    <span class="text-xs text-on-surface-variant">Vitor Roque · 9G</span>
+                  </div>
+                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
+                  <div class="flex flex-col items-end gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">Estudiantes LP</span>
+                    <span class="text-xs text-on-surface-variant">Guido Carrillo · 8G</span>
+                  </div>
+                </div>
+                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
+                  <span class="text-on-surface-variant">Probabilidad Modelo:</span>
+                  <span class="text-secondary font-bold">52% - 48% (Parejo)</span>
+                </div>
+              </div>
+
+              <!-- Event 2: El Clásico -->
+              <div onclick="openModalMatch('el-clasico')" class="bg-surface-container border border-outline-variant hover:border-tertiary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded bg-tertiary/10 text-tertiary border border-tertiary/20 text-[10px] font-mono font-bold uppercase">LaLiga EA Sports</span>
+                  <span class="text-xs font-mono text-on-surface-variant">Santiago Bernabéu</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-tertiary transition-colors">Real Madrid</span>
+                    <span class="text-xs text-secondary font-medium">xG 2.45 / 90</span>
+                  </div>
+                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
+                  <div class="flex flex-col items-end gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-tertiary transition-colors">FC Barcelona</span>
+                    <span class="text-xs text-tertiary font-medium">xG 2.80 / 90</span>
+                  </div>
+                </div>
+                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
+                  <span class="text-on-surface-variant">Mayor cuota de ataque:</span>
+                  <span class="text-tertiary font-bold">Barça +0.35 xG diff</span>
+                </div>
+              </div>
+
+              <!-- Event 3: NBA Showcase -->
+              <div onclick="switchTab('nba')" class="bg-surface-container border border-outline-variant hover:border-secondary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 text-[10px] font-mono font-bold uppercase">NBA Telemetry</span>
+                  <span class="text-xs font-mono text-warning font-semibold">Tonight · 20:30 EST</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-secondary transition-colors">Boston Celtics</span>
+                    <span class="text-xs text-on-surface-variant">ORTG: 122.4</span>
+                  </div>
+                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
+                  <div class="flex flex-col items-end gap-1">
+                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-secondary transition-colors">Denver Nuggets</span>
+                    <span class="text-xs text-on-surface-variant">TS%: 61.2%</span>
+                  </div>
+                </div>
+                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
+                  <span class="text-on-surface-variant">Pace proyectado:</span>
+                  <span class="text-secondary font-bold">99.5 posesiones</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: FÚTBOL ANALYTICS (UCL & LIBERTADORES) -->
+        <!-- ========================================== -->
+        <div id="view-futbol" class="view-section hidden flex flex-col gap-8">
+          <!-- Fútbol Header & Filters -->
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant pb-4">
+            <div>
+              <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Laboratorio de Análisis de Fútbol</h1>
+              <p class="font-body text-xs text-on-surface-variant">Telemetría de alta resolución, métricas avanzadas e historial directo</p>
+            </div>
+            
+            <div class="flex items-center gap-2 overflow-x-auto">
+              <button onclick="filterFutbol('todos')" id="btn-f-todos" class="f-filter active px-3.5 py-1.5 rounded-md bg-primary-container text-on-primary-container text-xs font-bold font-headline transition-colors">Todos</button>
+              <button onclick="filterFutbol('libertadores')" id="btn-f-libertadores" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Copa Libertadores 2026</button>
+              <button onclick="filterFutbol('ucl')" id="btn-f-ucl" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Champions League</button>
+              <button onclick="filterFutbol('laliga')" id="btn-f-laliga" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">LaLiga</button>
+            </div>
+          </div>
+
+          <!-- FEATURED MATCH: FINAL COPA LIBERTADORES 2026 -->
+          <section id="card-libertadores-featured" class="rounded-xl border-2 border-primary/40 bg-surface-container-lowest p-6 lg:p-8 relative overflow-hidden shadow-2xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded bg-primary-container text-on-primary-container text-xs font-bold font-mono uppercase">FINAL COPA LIBERTADORES 2026</span>
+                <span class="text-xs font-mono text-on-surface-variant">Sede Única Conmebol · Duelo Definitorio</span>
+              </div>
+              <span class="px-2.5 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/30 text-xs font-mono font-bold">MODELO AUDITADO</span>
+            </div>
+
+            <!-- Matchup Heads -->
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+              <!-- Palmeiras -->
+              <div class="md:col-span-5 flex items-center gap-4">
+                <div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-2xl text-secondary">
+                  PAL
+                </div>
+                <div>
+                  <h3 class="font-headline text-2xl font-black text-on-surface">SE Palmeiras</h3>
+                  <p class="text-xs text-on-surface-variant">São Paulo, Brasil · DT: Abel Ferreira</p>
+                  <p class="text-xs text-secondary font-mono mt-0.5">3 Títulos Libertadores (1999, 2020, 2021)</p>
+                </div>
+              </div>
+
+              <!-- Center VS -->
+              <div class="md:col-span-2 flex flex-col items-center justify-center text-center">
+                <span class="font-headline text-4xl font-black text-primary">VS</span>
+                <span class="text-[11px] font-mono text-on-surface-variant mt-1">xG Proyectado: 1.45 - 1.30</span>
+              </div>
+
+              <!-- Estudiantes LP -->
+              <div class="md:col-span-5 flex items-center md:justify-end gap-4">
+                <div class="md:text-right">
+                  <h3 class="font-headline text-2xl font-black text-on-surface">Estudiantes LP</h3>
+                  <p class="text-xs text-on-surface-variant">La Plata, Argentina · DT: Alexander Medina</p>
+                  <p class="text-xs text-primary font-mono mt-0.5">4 Títulos Libertadores (1968, 69, 70, 2009)</p>
+                </div>
+                <div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-2xl text-primary">
+                  EDLP
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Matrix -->
+            <div class="mt-8 pt-6 border-t border-outline-variant grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-secondary font-bold">Vitor Roque (9G, 3A)</span>
+                  <span class="text-on-surface-variant">Delanteros Estrella</span>
+                  <span class="text-primary font-bold">Guido Carrillo (8G, 3A)</span>
+                </div>
+                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
+                  <div class="bg-secondary h-full" style="width: 53%;"></div>
+                  <div class="bg-primary h-full" style="width: 47%;"></div>
+                </div>
+                <span class="text-[11px] text-on-surface-variant text-center font-mono">Apariciones ofensivas por 90 min</span>
+              </div>
+
+              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-secondary font-bold">54.2%</span>
+                  <span class="text-on-surface-variant">Posesión Media</span>
+                  <span class="text-primary font-bold">48.8%</span>
+                </div>
+                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
+                  <div class="bg-secondary h-full" style="width: 54%;"></div>
+                  <div class="bg-primary h-full" style="width: 46%;"></div>
+                </div>
+                <span class="text-[11px] text-on-surface-variant text-center font-mono">Control y circulación de balón</span>
+              </div>
+
+              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-secondary font-bold">0.68 / PJ</span>
+                  <span class="text-on-surface-variant">Solidez Defensiva (Goles recibidos)</span>
+                  <span class="text-primary font-bold">0.75 / PJ</span>
+                </div>
+                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
+                  <div class="bg-secondary h-full" style="width: 51%;"></div>
+                  <div class="bg-primary h-full" style="width: 49%;"></div>
+                </div>
+                <span class="text-[11px] text-on-surface-variant text-center font-mono">Eficacia en duelos aéreos y corte</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- UCL STANDINGS & HIGHLIGHTS -->
+          <section id="card-ucl-table" class="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col gap-4 shadow-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-headline text-lg font-bold text-on-surface">UEFA Champions League — Tabla Única (Fase de Liga)</h3>
+                <p class="font-body text-xs text-on-surface-variant">Los 36 equipos y sus 144 partidos oficiales registrados</p>
+              </div>
+              <span class="font-mono text-xs text-tertiary">Top 8 Directos a 8vos</span>
+            </div>
+
+            <!-- Responsive Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs font-body border-collapse">
+                <thead>
+                  <tr class="border-b border-outline-variant text-on-surface-variant font-mono text-[11px]">
+                    <th class="py-2.5 px-3">Pos</th>
+                    <th class="py-2.5 px-3">Equipo</th>
+                    <th class="py-2.5 px-2">País</th>
+                    <th class="py-2.5 px-2 text-center">PJ</th>
+                    <th class="py-2.5 px-2 text-center">G</th>
+                    <th class="py-2.5 px-2 text-center">E</th>
+                    <th class="py-2.5 px-2 text-center">P</th>
+                    <th class="py-2.5 px-2 text-center">GF</th>
+                    <th class="py-2.5 px-2 text-center">GC</th>
+                    <th class="py-2.5 px-2 text-center">DG</th>
+                    <th class="py-2.5 px-3 text-right">Pts</th>
+                    <th class="py-2.5 px-3 text-right">Estado</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant/50 font-mono">
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">1</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Liverpool</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">7</td>
+                    <td class="py-2.5 px-2 text-center">0</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">17</td>
+                    <td class="py-2.5 px-2 text-center">5</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+12</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">21</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">2</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Barcelona</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">6</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center font-bold text-primary">28</td>
+                    <td class="py-2.5 px-2 text-center">13</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+15</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">3</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Arsenal</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">6</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">17</td>
+                    <td class="py-2.5 px-2 text-center">3</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+14</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">4</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Inter de Milán</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Italia</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">6</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">11</td>
+                    <td class="py-2.5 px-2 text-center font-bold text-secondary">1</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+10</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">5</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Atlético de Madrid</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">6</td>
+                    <td class="py-2.5 px-2 text-center">0</td>
+                    <td class="py-2.5 px-2 text-center">2</td>
+                    <td class="py-2.5 px-2 text-center">20</td>
+                    <td class="py-2.5 px-2 text-center">12</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+8</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">18</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">6</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Bayer Leverkusen</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Alemania</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">5</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">2</td>
+                    <td class="py-2.5 px-2 text-center">15</td>
+                    <td class="py-2.5 px-2 text-center">7</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+8</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">7</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Lille</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Francia</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">5</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">2</td>
+                    <td class="py-2.5 px-2 text-center">17</td>
+                    <td class="py-2.5 px-2 text-center">10</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+7</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-secondary">8</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Aston Villa</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">5</td>
+                    <td class="py-2.5 px-2 text-center">1</td>
+                    <td class="py-2.5 px-2 text-center">2</td>
+                    <td class="py-2.5 px-2 text-center">13</td>
+                    <td class="py-2.5 px-2 text-center">6</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+7</td>
+                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-high transition-colors opacity-80">
+                    <td class="py-2.5 px-3 text-on-surface-variant">11</td>
+                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Real Madrid</td>
+                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
+                    <td class="py-2.5 px-2 text-center">8</td>
+                    <td class="py-2.5 px-2 text-center">5</td>
+                    <td class="py-2.5 px-2 text-center">0</td>
+                    <td class="py-2.5 px-2 text-center">3</td>
+                    <td class="py-2.5 px-2 text-center">20</td>
+                    <td class="py-2.5 px-2 text-center">11</td>
+                    <td class="py-2.5 px-2 text-center text-secondary">+9</td>
+                    <td class="py-2.5 px-3 text-right font-black text-on-surface">15</td>
+                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary text-[10px]">Play-offs (16vos)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: NBA ANALYTICS -->
+        <!-- ========================================== -->
+        <div id="view-nba" class="view-section hidden flex flex-col gap-8">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">NBA Advanced Telemetry</h1>
+            <p class="font-body text-xs text-on-surface-variant">Pace, True Shooting %, Eficiencia de tiro y tendencias de posesión</p>
+          </div>
+
+          <!-- NBA Game Card -->
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 lg:p-8 flex flex-col gap-6">
+            <div class="flex justify-between items-center">
+              <span class="px-2.5 py-1 rounded bg-secondary/10 text-secondary text-xs font-mono font-bold uppercase">NBA Regular Season Showcase</span>
+              <span class="text-xs font-mono text-on-surface-variant">TD Garden · Boston, MA</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+              <div class="md:col-span-5 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-xl text-secondary">
+                  BOS
+                </div>
+                <div>
+                  <h3 class="font-headline text-xl font-bold text-on-surface">Boston Celtics</h3>
+                  <p class="text-xs text-on-surface-variant">Récord: 48 - 14 | Net RTG: +10.2</p>
+                </div>
+              </div>
+
+              <div class="md:col-span-2 text-center">
+                <span class="font-headline text-3xl font-black text-primary">VS</span>
+                <p class="text-[11px] font-mono text-on-surface-variant">Línea esperada: -4.5 BOS</p>
+              </div>
+
+              <div class="md:col-span-5 flex items-center md:justify-end gap-4">
+                <div class="md:text-right">
+                  <h3 class="font-headline text-xl font-bold text-on-surface">Denver Nuggets</h3>
+                  <p class="text-xs text-on-surface-variant">Récord: 45 - 19 | Net RTG: +7.8</p>
+                </div>
+                <div class="w-14 h-14 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-xl text-tertiary">
+                  DEN
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-outline-variant">
+              <div class="bg-surface-container p-3 rounded flex flex-col">
+                <span class="text-[11px] font-mono text-on-surface-variant">Pace Proyectado</span>
+                <span class="font-headline text-xl font-extrabold text-on-surface">99.2</span>
+                <span class="text-[10px] text-secondary">Alto ritmo de juego</span>
+              </div>
+              <div class="bg-surface-container p-3 rounded flex flex-col">
+                <span class="text-[11px] font-mono text-on-surface-variant">Offensive Rating</span>
+                <span class="font-headline text-xl font-extrabold text-secondary">122.4</span>
+                <span class="text-[10px] text-on-surface-variant">BOS Top 1 liga</span>
+              </div>
+              <div class="bg-surface-container p-3 rounded flex flex-col">
+                <span class="text-[11px] font-mono text-on-surface-variant">True Shooting %</span>
+                <span class="font-headline text-xl font-extrabold text-tertiary">61.5%</span>
+                <span class="text-[10px] text-on-surface-variant">Eficiencia pura</span>
+              </div>
+              <div class="bg-surface-container p-3 rounded flex flex-col">
+                <span class="text-[11px] font-mono text-on-surface-variant">3PT Frequency</span>
+                <span class="font-headline text-xl font-extrabold text-warning">46.8%</span>
+                <span class="text-[10px] text-on-surface-variant">Volumen exterior</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: ESPORTS (VALORANT & CS2) -->
+        <!-- ========================================== -->
+        <div id="view-esports" class="view-section hidden flex flex-col gap-8">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Esports Quantitative Telemetry</h1>
+            <p class="font-body text-xs text-on-surface-variant">Métricas de rondas de pistolas, ADR, First Kills y retomas de bomba</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
+              <span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary text-xs font-mono font-bold w-fit">VALORANT Champions Tour</span>
+              <div class="flex justify-between items-center">
+                <span class="font-headline text-lg font-bold">Sentinels</span>
+                <span class="font-mono text-sm text-primary font-bold">VS</span>
+                <span class="font-headline text-lg font-bold">Fnatic</span>
+              </div>
+              <div class="space-y-2 text-xs font-mono pt-2">
+                <div class="flex justify-between"><span class="text-on-surface-variant">Pistol Round Winrate:</span><span class="text-secondary font-bold">62.5% vs 58.0%</span></div>
+                <div class="flex justify-between"><span class="text-on-surface-variant">Eco Conversion:</span><span class="text-tertiary font-bold">24.2%</span></div>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
+              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-xs font-mono font-bold w-fit">Counter-Strike 2 Major</span>
+              <div class="flex justify-between items-center">
+                <span class="font-headline text-lg font-bold">FaZe Clan</span>
+                <span class="font-mono text-sm text-primary font-bold">VS</span>
+                <span class="font-headline text-lg font-bold">Team Vitality</span>
+              </div>
+              <div class="space-y-2 text-xs font-mono pt-2">
+                <div class="flex justify-between"><span class="text-on-surface-variant">Opening Duel Winrate:</span><span class="text-secondary font-bold">54.8% ZywOo</span></div>
+                <div class="flex justify-between"><span class="text-on-surface-variant">Clutch Success Rate:</span><span class="text-warning font-bold">36.5%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: MODELO & PRONÓSTICOS AUDITADOS -->
+        <!-- ========================================== -->
+        <div id="view-analisis" class="view-section hidden flex flex-col gap-8">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Arquitectura del Modelo Predictivo v4.2</h1>
+            <p class="font-body text-xs text-on-surface-variant">Metodología cuantitativa y separación de datos verificados</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
+              <span class="material-symbols-outlined text-primary text-3xl">model_training</span>
+              <h3 class="font-headline text-base font-bold text-on-surface">1. Ingesta de Telemetría</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">
+                Recopilación segundo a segundo de coordenadas de tiro, velocidad de presión, fatiga acumulada y minutos de juego.
+              </p>
+            </div>
+            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
+              <span class="material-symbols-outlined text-secondary text-3xl">psychology</span>
+              <h3 class="font-headline text-base font-bold text-on-surface">2. Simulación Monte Carlo</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">
+                10,000 iteraciones por encuentro para calcular la distribución real de probabilidad de goles y posesiones.
+              </p>
+            </div>
+            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
+              <span class="material-symbols-outlined text-tertiary text-3xl">verified_user</span>
+              <h3 class="font-headline text-base font-bold text-on-surface">3. Auditoría Abierta</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">
+                Sin intermediarios ni cuotas de azar. Solo métricas cuantitativas reproducibles para analistas deportivos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-pronosticos" class="view-section hidden flex flex-col gap-8">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Pronósticos y Proyecciones Auditadas</h1>
+            <p class="font-body text-xs text-on-surface-variant">Historial público con métricas de acierto y valor esperado</p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between text-xs font-mono border-b border-outline-variant pb-3">
+              <span class="text-on-surface-variant">Partido Proyectado</span>
+              <span class="text-on-surface-variant">Métrica Analizada</span>
+              <span class="text-on-surface-variant">Confianza</span>
+            </div>
+            <div class="flex items-center justify-between text-xs font-mono py-2">
+              <span class="font-bold text-on-surface">Palmeiras vs Estudiantes LP</span>
+              <span class="text-secondary font-semibold">Total Goles: Menos de 2.5 (xG 2.15)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary font-bold">84% ALTA</span>
+            </div>
+            <div class="flex items-center justify-between text-xs font-mono py-2">
+              <span class="font-bold text-on-surface">Liverpool vs Real Madrid</span>
+              <span class="text-secondary font-semibold">xG Liverpool > 1.80</span>
+              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary font-bold">89% VERIFICADO</span>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE MODAL (Match / Telemetry Details) -->
+  <div id="telemetry-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant max-w-2xl w-full rounded-xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-6 border-b border-outline-variant flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+          <h3 id="modal-title" class="font-headline text-lg font-bold text-on-surface">Telemetría de Partido</h3>
+        </div>
+        <button onclick="closeModal()" class="text-on-surface-variant hover:text-on-surface p-1 rounded">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <div id="modal-body" class="p-6 flex flex-col gap-4 text-xs font-mono text-on-surface">
+        <!-- Content inserted dynamically -->
+      </div>
+      <div class="p-4 bg-surface-container-lowest border-t border-outline-variant flex justify-end">
+        <button onclick="closeModal()" class="px-4 py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest text-xs font-bold transition-colors">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+      const activeView = document.getElementById('view-' + tabId);
+      if (activeView) activeView.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('active', 'bg-surface-container-high', 'text-on-surface');
+        btn.classList.add('text-on-surface-variant');
+      });
+      const activeBtn = document.getElementById('nav-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-surface-container-high', 'text-on-surface');
+        activeBtn.classList.remove('text-on-surface-variant');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterFutbol(category) {
+      document.querySelectorAll('.f-filter').forEach(btn => {
+        btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        btn.classList.add('bg-surface-container-high', 'text-on-surface');
+      });
+      const current = document.getElementById('btn-f-' + category);
+      if (current) {
+        current.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        current.classList.remove('bg-surface-container-high');
+      }
+
+      const cardLib = document.getElementById('card-libertadores-featured');
+      const cardUcl = document.getElementById('card-ucl-table');
+
+      if (category === 'libertadores') {
+        cardLib.style.display = 'block';
+        cardUcl.style.display = 'none';
+      } else if (category === 'ucl') {
+        cardLib.style.display = 'none';
+        cardUcl.style.display = 'block';
+      } else {
+        cardLib.style.display = 'block';
+        cardUcl.style.display = 'block';
+      }
+    }
+
+    function openModalMatch(type) {
+      const modal = document.getElementById('telemetry-modal');
+      const title = document.getElementById('modal-title');
+      const body = document.getElementById('modal-body');
+
+      if (type === 'final-libertadores') {
+        title.innerText = 'Copa Libertadores 2026: Gran Final';
+        body.innerHTML = `
+          <div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-2">
+            <span class="text-primary font-bold text-sm">SE Palmeiras vs Club Estudiantes de La Plata</span>
+            <span class="text-on-surface-variant">Sede Única Conmebol · Temporada 2026</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-surface-container-high p-3 rounded">
+              <span class="text-on-surface-variant block">Figura Palmeiras:</span>
+              <span class="text-secondary font-bold text-sm">Vitor Roque (9 goles en Libertadores)</span>
+              <span class="text-[11px] block text-on-surface-variant mt-1">Dorsal 19 · Valor: €30M</span>
+            </div>
+            <div class="bg-surface-container-high p-3 rounded">
+              <span class="text-on-surface-variant block">Figura Estudiantes:</span>
+              <span class="text-primary font-bold text-sm">Guido Carrillo (8 goles en Libertadores)</span>
+              <span class="text-[11px] block text-on-surface-variant mt-1">Dorsal 9 · Capitán de ataque</span>
+            </div>
+          </div>
+          <div class="bg-surface-container-low p-3 rounded flex flex-col gap-1.5">
+            <span class="text-secondary font-bold">Model Telemetry Insights:</span>
+            <p class="text-on-surface-variant leading-relaxed">
+              Estudiantes llega tras vencer a Flamengo en semifinales (global 3-2). Palmeiras eliminó a Boca Juniors (2-0 global). Partido de máxima paridad táctica con expectativa de menos de 2.5 goles.
+            </p>
+          </div>
+        `;
+      } else if (type === 'el-clasico') {
+        title.innerText = 'El Clásico: Real Madrid vs FC Barcelona';
+        body.innerHTML = `
+          <div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-2">
+            <span class="text-tertiary font-bold text-sm">Santiago Bernabéu · LaLiga EA Sports</span>
+            <span class="text-on-surface-variant">Promedios últimos 10 partidos oficiales</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3 text-center">
+            <div class="bg-surface-container-high p-3 rounded">
+              <span class="text-xs text-on-surface-variant">Real Madrid</span>
+              <span class="text-xl font-bold text-secondary block mt-1">2.45 xG</span>
+            </div>
+            <div class="bg-surface-container-high p-3 rounded">
+              <span class="text-xs text-on-surface-variant">FC Barcelona</span>
+              <span class="text-xl font-bold text-primary block mt-1">2.80 xG</span>
+            </div>
+          </div>
+        `;
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function openModalAnalyze() {
+      const modal = document.getElementById('telemetry-modal');
+      const title = document.getElementById('modal-title');
+      const body = document.getElementById('modal-body');
+
+      title.innerText = 'Simulador Predictivo Cuantitativo (xG Engine)';
+      body.innerHTML = `
+        <p class="text-on-surface-variant leading-relaxed">
+          Ingresa cualquier partido para ejecutar 10,000 iteraciones estocásticas basadas en posesión, tiros al arco e índice de presión defensiva.
+        </p>
+        <div class="bg-surface-container-high p-4 rounded-lg flex flex-col gap-2">
+          <label class="text-xs text-on-surface-variant">Seleccionar Partido:</label>
+          <select class="bg-surface-container border border-outline-variant text-xs text-on-surface p-2 rounded">
+            <option>Palmeiras vs Estudiantes de La Plata (Final Libertadores 2026)</option>
+            <option>Liverpool vs Barcelona (Champions League)</option>
+            <option>Real Madrid vs Arsenal (Champions League)</option>
+          </select>
+          <div class="mt-3 p-3 bg-surface-container-lowest rounded text-secondary font-bold">
+            Simulación Monte Carlo completada: 52% Prob. Local / 48% Prob. Visita
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('telemetry-modal').classList.add('hidden');
+    }
+
+    function handleSearch(val) {
+      if (!val) return;
+      const lower = val.toLowerCase();
+      if (lower.includes('estudiantes') || lower.includes('palmeiras') || lower.includes('libertadores')) {
+        switchTab('futbol');
+        filterFutbol('libertadores');
+      } else if (lower.includes('champions') || lower.includes('ucl') || lower.includes('madrid') || lower.includes('barca')) {
+        switchTab('futbol');
+        filterFutbol('ucl');
+      } else if (lower.includes('nba') || lower.includes('celtics')) {
+        switchTab('nba');
+      }
+    }
+  </script>
+</body>
+</html>
