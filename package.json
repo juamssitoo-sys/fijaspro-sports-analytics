@@ -1,0 +1,13 @@
+{
+  "name": "fijaspro-sports-analytics",
+  "version": "1.0.0",
+  "description": "FijasPro — Kinetic Telemetry Sports Analytics Platform",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
