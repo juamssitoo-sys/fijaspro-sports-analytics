@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FijasPro — Kinetic Telemetry Sports Analytics</title>
-  <meta name="description" content="Plataforma de analítica deportiva inteligente, telemetría cuantitativa y modelos predictivos verificados para Fútbol, NBA y Esports.">
+  <meta name="description" content="Plataforma de analítica deportiva inteligente, telemetría cuantitativa y modelos predictivos verificados para Fútbol (UEFA Champions League y Copa Libertadores 2026), NBA y Esports.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -32,13 +32,9 @@
             'on-warning': '#3B2600',
             'error': '#FFB4AB',
             'on-error': '#690005',
-            'error-container': '#93000A',
-            'on-error-container': '#FFDAD6',
             'background': '#111318',
             'on-background': '#E2E2E9',
             'surface': '#111318',
-            'surface-dim': '#111318',
-            'surface-bright': '#37393F',
             'surface-container-lowest': '#0C0E13',
             'surface-container-low': '#1A1B21',
             'surface-container': '#1E2025',
@@ -75,16 +71,12 @@
       overflow: hidden;
       vertical-align: middle;
     }
-    /* Smooth transitions */
     .view-section {
       transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
     }
     .view-section.hidden {
       display: none;
-      opacity: 0;
-      transform: translateY(6px);
     }
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -131,28 +123,44 @@
             <span class="font-mono text-xs text-secondary tabular-nums">LIVE</span>
           </button>
           
-          <button onclick="switchTab('futbol')" id="nav-btn-futbol" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+          <button onclick="switchTab('partidos')" id="nav-btn-partidos" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
             <span class="flex items-center gap-3">
               <span class="material-symbols-outlined text-xl">sports_soccer</span>
-              <span class="font-label text-sm">Fútbol</span>
+              <span class="font-label text-sm">Todos los Partidos</span>
             </span>
-            <span class="font-mono text-xs text-secondary tabular-nums font-semibold">UCL & Lib</span>
+            <span class="font-mono text-xs text-secondary tabular-nums font-bold" id="badge-total-matches">152</span>
+          </button>
+
+          <button onclick="switchTab('futbol')" id="nav-btn-futbol" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">military_tech</span>
+              <span class="font-label text-sm">Final Libertadores</span>
+            </span>
+            <span class="font-mono text-xs text-primary tabular-nums font-semibold">2026</span>
+          </button>
+
+          <button onclick="switchTab('ucl')" id="nav-btn-ucl" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">emoji_events</span>
+              <span class="font-label text-sm">Tabla Champions</span>
+            </span>
+            <span class="font-mono text-xs text-tertiary tabular-nums">36 Clubs</span>
+          </button>
+
+          <button onclick="switchTab('plantillas')" id="nav-btn-plantillas" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">groups</span>
+              <span class="font-label text-sm">Planteles 2025-26</span>
+            </span>
+            <span class="font-mono text-xs text-on-surface-variant tabular-nums">39 Jug.</span>
           </button>
 
           <button onclick="switchTab('nba')" id="nav-btn-nba" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
             <span class="flex items-center gap-3">
               <span class="material-symbols-outlined text-xl">sports_basketball</span>
-              <span class="font-label text-sm">NBA</span>
+              <span class="font-label text-sm">NBA Telemetry</span>
             </span>
-            <span class="font-mono text-xs text-on-surface-variant tabular-nums">4</span>
-          </button>
-
-          <button onclick="switchTab('esports')" id="nav-btn-esports" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
-            <span class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-xl">sports_esports</span>
-              <span class="font-label text-sm">Esports</span>
-            </span>
-            <span class="font-mono text-xs text-tertiary tabular-nums">CS2 / VCT</span>
+            <span class="font-mono text-xs text-on-surface-variant tabular-nums">Pace/TS</span>
           </button>
 
           <div class="my-2 border-t border-outline-variant"></div>
@@ -160,11 +168,6 @@
           <button onclick="switchTab('analisis')" id="nav-btn-analisis" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
             <span class="material-symbols-outlined text-xl">neurology</span>
             <span class="font-label text-sm">Modelo Cuantitativo</span>
-          </button>
-
-          <button onclick="switchTab('pronosticos')" id="nav-btn-pronosticos" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-medium text-left transition-colors">
-            <span class="material-symbols-outlined text-xl">fact_check</span>
-            <span class="font-label text-sm">Pronósticos Auditados</span>
           </button>
         </nav>
       </div>
@@ -176,10 +179,10 @@
             <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
             <span class="font-mono text-xs text-secondary font-bold uppercase tracking-wider">Engine v4.2 Online</span>
           </div>
-          <span class="font-mono text-[10px] text-on-surface-variant">99.8% Lat</span>
+          <span class="font-mono text-[10px] text-on-surface-variant">152 Partidos</span>
         </div>
         <p class="font-body text-xs text-on-surface-variant leading-relaxed">
-          Estadísticas deportivas verificadas separadas de estimaciones. Cero cuotas, 100% analítica de rendimiento.
+          Base de datos sincronizada: 144 partidos UCL + 6 Copa Libertadores + 39 jugadores activos.
         </p>
       </div>
     </aside>
@@ -188,38 +191,28 @@
     <div class="flex-1 flex flex-col min-w-0">
       <!-- Top Utility Header -->
       <header class="h-16 px-4 lg:px-8 border-b border-outline-variant bg-surface-container-lowest/90 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <!-- Mobile Menu Toggle Button -->
-          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface">
-            <span class="material-symbols-outlined text-2xl">menu</span>
-          </button>
-          
+        <div class="flex items-center gap-3">
           <div class="flex items-center gap-2.5">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-xs font-semibold uppercase tracking-wider">
               <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-              En Vivo
+              Live Feed
             </span>
             <span class="hidden sm:inline font-mono text-xs text-on-surface-variant">
-              Telemetría activa · 2026 Season
+              152 partidos disponibles · UCL & Libertadores
             </span>
           </div>
         </div>
 
         <!-- Quick Action Toolbar -->
         <div class="flex items-center gap-3">
-          <div class="relative hidden md:block">
-            <span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-lg">search</span>
-            <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar equipo o jugador..." class="bg-surface-container-high border border-outline-variant text-xs text-on-surface rounded-md pl-9 pr-4 py-2 w-56 focus:outline-none focus:border-primary">
+          <div class="relative w-48 sm:w-64">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-base">search</span>
+            <input type="text" id="live-search-input" oninput="filterMatches()" placeholder="Buscar equipo..." class="w-full bg-surface-container-high border border-outline-variant text-xs text-on-surface rounded-md pl-9 pr-3 py-2 focus:outline-none focus:border-primary">
           </div>
 
-          <button onclick="openModalMatch('final-libertadores')" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold transition-transform hover:scale-105 active:scale-95 shadow-md shadow-primary-container/20">
-            <span class="material-symbols-outlined text-base">sports_soccer</span>
-            <span>Final Libertadores 2026</span>
-          </button>
-
-          <button onclick="openModalAnalyze()" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-on-surface border border-outline-variant hover:bg-surface-container-highest text-xs font-semibold transition-colors">
-            <span class="material-symbols-outlined text-base text-primary">analytics</span>
-            <span class="hidden sm:inline">Analizador xG</span>
+          <button onclick="switchTab('partidos')" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold hover:bg-primary transition-colors">
+            <span class="material-symbols-outlined text-base">list</span>
+            <span>Ver Todos</span>
           </button>
         </div>
       </header>
@@ -238,569 +231,323 @@
             <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div class="lg:col-span-7 flex flex-col gap-4">
                 <div class="flex flex-wrap items-center gap-2.5">
-                  <span class="px-2.5 py-1 rounded bg-tertiary/15 text-tertiary border border-tertiary/30 text-[11px] font-mono uppercase tracking-wider font-bold">
-                    Telemetry Lab v4.2
+                  <span class="px-2.5 py-1 rounded bg-primary-container text-on-primary-container text-[11px] font-mono uppercase tracking-wider font-bold">
+                    Base de Datos Activa
                   </span>
-                  <span class="text-xs font-mono text-on-surface-variant">FÚTBOL · NBA · VALORANT · CS2</span>
+                  <span class="text-xs font-mono text-secondary">152 Partidos Verificados</span>
                 </div>
 
                 <h1 class="font-headline text-3xl lg:text-5xl font-black text-on-surface leading-tight tracking-tight">
-                  Donde la pasión deportiva encuentra la <span class="text-primary underline decoration-primary-container decoration-wavy decoration-2">precisión cuantitativa</span>.
+                  Centro de Inteligencia y <span class="text-primary underline decoration-primary-container decoration-wavy decoration-2">Telemetría Deportiva</span>.
                 </h1>
 
                 <p class="font-body text-sm lg:text-base text-on-surface-variant max-w-2xl leading-relaxed">
-                  Datos reales verificados, mapas de calor, expected goals (xG), probabilidades de victoria y analítica pura para la <strong>UEFA Champions League</strong> y la gran final de la <strong>Copa Libertadores 2026</strong>.
+                  Accede a los <strong>144 partidos oficiales de la UEFA Champions League</strong> (fase de liga completa) y la <strong>Copa Libertadores 2026</strong> (Gran Final Palmeiras vs Estudiantes de La Plata, semifinales y plantillas 2025-2026).
                 </p>
 
                 <div class="flex flex-wrap items-center gap-3 pt-2">
-                  <button onclick="switchTab('futbol')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold tracking-wide hover:bg-primary transition-all">
-                    <span class="material-symbols-outlined text-lg">bolt</span>
-                    <span>Explorar Fútbol 2026</span>
+                  <button onclick="switchTab('partidos')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary-container text-on-primary-container font-headline text-xs font-bold tracking-wide hover:bg-primary transition-all">
+                    <span class="material-symbols-outlined text-lg">view_list</span>
+                    <span>Explorar 152 Partidos</span>
                   </button>
-                  <button onclick="switchTab('nba')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-surface-container-high text-on-surface border border-outline-variant text-xs font-semibold hover:bg-surface-container-highest transition-colors">
-                    <span class="material-symbols-outlined text-lg">sports_basketball</span>
-                    <span>Ver Métricas NBA</span>
+                  <button onclick="switchTab('futbol')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-surface-container-high text-on-surface border border-outline-variant text-xs font-semibold hover:bg-surface-container-highest transition-colors">
+                    <span class="material-symbols-outlined text-lg">military_tech</span>
+                    <span>Final Libertadores 2026</span>
                   </button>
                 </div>
               </div>
 
-              <!-- Live Key Metrics Card (Right Column) -->
+              <!-- Metrics Summary Cards -->
               <div class="lg:col-span-5 grid grid-cols-2 gap-3">
-                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
-                  <span class="text-xs font-mono text-on-surface-variant uppercase">Champions League</span>
-                  <span class="font-headline text-2xl font-extrabold text-secondary tabular-nums">36 Clubes</span>
-                  <span class="text-[11px] text-on-surface-variant">144 partidos completados</span>
+                <div onclick="filterByLeague('Champions')" class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1 cursor-pointer hover:border-tertiary transition-colors">
+                  <span class="text-xs font-mono text-tertiary uppercase">Champions League</span>
+                  <span class="font-headline text-2xl font-extrabold text-on-surface tabular-nums">144 Partidos</span>
+                  <span class="text-[11px] text-on-surface-variant">36 clubes clasificados</span>
                 </div>
-                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
-                  <span class="text-xs font-mono text-on-surface-variant uppercase">Final Libertadores 2026</span>
-                  <span class="font-headline text-2xl font-extrabold text-primary tabular-nums">Palmeiras vs EDLP</span>
-                  <span class="text-[11px] text-secondary font-medium">Gran Final Definitoria</span>
+                <div onclick="filterByLeague('Libertadores')" class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1 cursor-pointer hover:border-primary transition-colors">
+                  <span class="text-xs font-mono text-primary uppercase">Copa Libertadores</span>
+                  <span class="font-headline text-2xl font-extrabold text-on-surface tabular-nums">Gran Final</span>
+                  <span class="text-[11px] text-secondary">Palmeiras vs Estudiantes</span>
                 </div>
-                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
-                  <span class="text-xs font-mono text-on-surface-variant uppercase">Efectividad Modelo v4.2</span>
-                  <span class="font-headline text-2xl font-extrabold text-tertiary tabular-nums">78.4%</span>
-                  <span class="text-[11px] text-on-surface-variant">Confiabilidad xG / xA</span>
+                <div onclick="switchTab('plantillas')" class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1 cursor-pointer hover:border-secondary transition-colors">
+                  <span class="text-xs font-mono text-secondary uppercase">Planteles 2025-26</span>
+                  <span class="font-headline text-2xl font-extrabold text-on-surface tabular-nums">39 Jugadores</span>
+                  <span class="text-[11px] text-on-surface-variant">Goles, asistencias, xG</span>
                 </div>
-                <div class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1">
-                  <span class="text-xs font-mono text-on-surface-variant uppercase">Goles / Partido UCL</span>
-                  <span class="font-headline text-2xl font-extrabold text-warning tabular-nums">3.26</span>
-                  <span class="text-[11px] text-on-surface-variant">470 goles en 144 PJ</span>
+                <div onclick="switchTab('nba')" class="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex flex-col gap-1 cursor-pointer hover:border-warning transition-colors">
+                  <span class="text-xs font-mono text-warning uppercase">NBA Telemetry</span>
+                  <span class="font-headline text-2xl font-extrabold text-on-surface tabular-nums">Showcases</span>
+                  <span class="text-[11px] text-on-surface-variant">Celtics, Nuggets, Warriors</span>
                 </div>
               </div>
             </div>
           </section>
 
-          <!-- Top Events Section -->
+          <!-- Quick Access Cards Section -->
           <section class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
               <div>
-                <h2 class="font-headline text-xl font-bold text-on-surface">Eventos Destacados de Análisis</h2>
-                <p class="font-body text-xs text-on-surface-variant">Modelos predictivos en tiempo real con intervalos de confianza</p>
+                <h2 class="font-headline text-xl font-bold text-on-surface">Partidos Destacados & Finales</h2>
+                <p class="font-body text-xs text-on-surface-variant">Selecciona cualquiera para ver telemetría y desglose</p>
               </div>
-              <span class="font-mono text-xs text-secondary font-medium">Actualizado: Hoy · En línea</span>
+              <button onclick="switchTab('partidos')" class="text-xs font-mono text-secondary hover:underline">Ver catálogo completo (152) →</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <!-- Event 1: Final Libertadores -->
-              <div onclick="openModalMatch('final-libertadores')" class="bg-surface-container border border-outline-variant hover:border-primary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
-                <div class="flex items-center justify-between">
-                  <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 text-[10px] font-mono font-bold uppercase">Copa Libertadores 2026</span>
-                  <span class="text-xs font-mono text-secondary font-semibold">GRAN FINAL</span>
-                </div>
-                <div class="flex items-center justify-between py-2">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">SE Palmeiras</span>
-                    <span class="text-xs text-on-surface-variant">Vitor Roque · 9G</span>
-                  </div>
-                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
-                  <div class="flex flex-col items-end gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">Estudiantes LP</span>
-                    <span class="text-xs text-on-surface-variant">Guido Carrillo · 8G</span>
-                  </div>
-                </div>
-                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
-                  <span class="text-on-surface-variant">Probabilidad Modelo:</span>
-                  <span class="text-secondary font-bold">52% - 48% (Parejo)</span>
-                </div>
-              </div>
-
-              <!-- Event 2: El Clásico -->
-              <div onclick="openModalMatch('el-clasico')" class="bg-surface-container border border-outline-variant hover:border-tertiary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
-                <div class="flex items-center justify-between">
-                  <span class="px-2 py-0.5 rounded bg-tertiary/10 text-tertiary border border-tertiary/20 text-[10px] font-mono font-bold uppercase">LaLiga EA Sports</span>
-                  <span class="text-xs font-mono text-on-surface-variant">Santiago Bernabéu</span>
-                </div>
-                <div class="flex items-center justify-between py-2">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-tertiary transition-colors">Real Madrid</span>
-                    <span class="text-xs text-secondary font-medium">xG 2.45 / 90</span>
-                  </div>
-                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
-                  <div class="flex flex-col items-end gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-tertiary transition-colors">FC Barcelona</span>
-                    <span class="text-xs text-tertiary font-medium">xG 2.80 / 90</span>
-                  </div>
-                </div>
-                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
-                  <span class="text-on-surface-variant">Mayor cuota de ataque:</span>
-                  <span class="text-tertiary font-bold">Barça +0.35 xG diff</span>
-                </div>
-              </div>
-
-              <!-- Event 3: NBA Showcase -->
-              <div onclick="switchTab('nba')" class="bg-surface-container border border-outline-variant hover:border-secondary/50 transition-all rounded-lg p-5 flex flex-col gap-4 cursor-pointer group">
-                <div class="flex items-center justify-between">
-                  <span class="px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 text-[10px] font-mono font-bold uppercase">NBA Telemetry</span>
-                  <span class="text-xs font-mono text-warning font-semibold">Tonight · 20:30 EST</span>
-                </div>
-                <div class="flex items-center justify-between py-2">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-secondary transition-colors">Boston Celtics</span>
-                    <span class="text-xs text-on-surface-variant">ORTG: 122.4</span>
-                  </div>
-                  <span class="font-headline text-xl font-black text-on-surface-variant px-3">VS</span>
-                  <div class="flex flex-col items-end gap-1">
-                    <span class="font-headline text-base font-bold text-on-surface group-hover:text-secondary transition-colors">Denver Nuggets</span>
-                    <span class="text-xs text-on-surface-variant">TS%: 61.2%</span>
-                  </div>
-                </div>
-                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
-                  <span class="text-on-surface-variant">Pace proyectado:</span>
-                  <span class="text-secondary font-bold">99.5 posesiones</span>
-                </div>
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="home-featured-grid">
+              <!-- Rendered via JS -->
             </div>
           </section>
         </div>
 
         <!-- ========================================== -->
-        <!-- SECTION 2: FÚTBOL ANALYTICS (UCL & LIBERTADORES) -->
+        <!-- SECTION 2: TODOS LOS PARTIDOS (FULL FEED) -->
         <!-- ========================================== -->
-        <div id="view-futbol" class="view-section hidden flex flex-col gap-8">
-          <!-- Fútbol Header & Filters -->
+        <div id="view-partidos" class="view-section hidden flex flex-col gap-6">
           <div class="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant pb-4">
             <div>
-              <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Laboratorio de Análisis de Fútbol</h1>
-              <p class="font-body text-xs text-on-surface-variant">Telemetría de alta resolución, métricas avanzadas e historial directo</p>
+              <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Catálogo Completo de Partidos</h1>
+              <p class="font-body text-xs text-on-surface-variant">152 partidos oficiales registrados con telemetría de goles esperados (xG)</p>
             </div>
-            
-            <div class="flex items-center gap-2 overflow-x-auto">
-              <button onclick="filterFutbol('todos')" id="btn-f-todos" class="f-filter active px-3.5 py-1.5 rounded-md bg-primary-container text-on-primary-container text-xs font-bold font-headline transition-colors">Todos</button>
-              <button onclick="filterFutbol('libertadores')" id="btn-f-libertadores" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Copa Libertadores 2026</button>
-              <button onclick="filterFutbol('ucl')" id="btn-f-ucl" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Champions League</button>
-              <button onclick="filterFutbol('laliga')" id="btn-f-laliga" class="f-filter px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">LaLiga</button>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="filterByLeague('all')" id="btn-filter-all" class="league-btn active px-3.5 py-1.5 rounded-md bg-primary-container text-on-primary-container text-xs font-bold font-headline transition-colors">Todos (152)</button>
+              <button onclick="filterByLeague('Libertadores')" id="btn-filter-Libertadores" class="league-btn px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Copa Libertadores 2026</button>
+              <button onclick="filterByLeague('Champions')" id="btn-filter-Champions" class="league-btn px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">Champions League (144)</button>
+              <button onclick="filterByLeague('NBA')" id="btn-filter-NBA" class="league-btn px-3.5 py-1.5 rounded-md bg-surface-container-high text-on-surface text-xs font-semibold hover:bg-surface-container-highest transition-colors">NBA</button>
             </div>
           </div>
 
-          <!-- FEATURED MATCH: FINAL COPA LIBERTADORES 2026 -->
-          <section id="card-libertadores-featured" class="rounded-xl border-2 border-primary/40 bg-surface-container-lowest p-6 lg:p-8 relative overflow-hidden shadow-2xl">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 rounded bg-primary-container text-on-primary-container text-xs font-bold font-mono uppercase">FINAL COPA LIBERTADORES 2026</span>
-                <span class="text-xs font-mono text-on-surface-variant">Sede Única Conmebol · Duelo Definitorio</span>
-              </div>
-              <span class="px-2.5 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/30 text-xs font-mono font-bold">MODELO AUDITADO</span>
-            </div>
+          <!-- Sub-filter by Matchday for UCL -->
+          <div id="ucl-matchday-bar" class="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-outline-variant/40">
+            <span class="text-xs font-mono text-on-surface-variant pr-2">Jornada UCL:</span>
+            <button onclick="filterByMatchday('all')" class="mday-btn active px-2.5 py-1 rounded bg-surface-container-high text-on-surface text-xs font-mono font-bold">Todas</button>
+            <button onclick="filterByMatchday('Jornada 1')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 1</button>
+            <button onclick="filterByMatchday('Jornada 2')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 2</button>
+            <button onclick="filterByMatchday('Jornada 3')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 3</button>
+            <button onclick="filterByMatchday('Jornada 4')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 4</button>
+            <button onclick="filterByMatchday('Jornada 5')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 5</button>
+            <button onclick="filterByMatchday('Jornada 6')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 6</button>
+            <button onclick="filterByMatchday('Jornada 7')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 7</button>
+            <button onclick="filterByMatchday('Jornada 8')" class="mday-btn px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-xs font-mono">Jor 8</button>
+          </div>
 
-            <!-- Matchup Heads -->
+          <!-- Results Count Indicator -->
+          <div class="flex items-center justify-between text-xs font-mono text-on-surface-variant">
+            <span id="matches-counter">Mostrando 152 partidos</span>
+            <span class="text-secondary font-semibold">Haz clic en cualquier partido para ver el análisis</span>
+          </div>
+
+          <!-- Dynamic Matches Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="matches-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: FINAL LIBERTADORES 2026 -->
+        <!-- ========================================== -->
+        <div id="view-futbol" class="view-section hidden flex flex-col gap-8">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Copa Libertadores 2026 — La Gran Final</h1>
+            <p class="font-body text-xs text-on-surface-variant">SE Palmeiras vs Club Estudiantes de La Plata · Sede Única Conmebol</p>
+          </div>
+
+          <!-- Final Banner -->
+          <div class="rounded-xl border-2 border-primary/50 bg-surface-container-lowest p-6 lg:p-10 relative overflow-hidden shadow-2xl">
             <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
               <!-- Palmeiras -->
               <div class="md:col-span-5 flex items-center gap-4">
-                <div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-2xl text-secondary">
+                <div class="w-20 h-20 rounded-2xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-3xl text-secondary">
                   PAL
                 </div>
                 <div>
+                  <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px] font-mono font-bold uppercase">Brasil · 3 Títulos</span>
                   <h3 class="font-headline text-2xl font-black text-on-surface">SE Palmeiras</h3>
-                  <p class="text-xs text-on-surface-variant">São Paulo, Brasil · DT: Abel Ferreira</p>
-                  <p class="text-xs text-secondary font-mono mt-0.5">3 Títulos Libertadores (1999, 2020, 2021)</p>
+                  <p class="text-xs text-on-surface-variant">DT: Abel Ferreira</p>
+                  <p class="text-xs text-secondary font-mono mt-1">Goleador: Vitor Roque (9 goles)</p>
                 </div>
               </div>
 
-              <!-- Center VS -->
+              <!-- VS -->
               <div class="md:col-span-2 flex flex-col items-center justify-center text-center">
-                <span class="font-headline text-4xl font-black text-primary">VS</span>
-                <span class="text-[11px] font-mono text-on-surface-variant mt-1">xG Proyectado: 1.45 - 1.30</span>
+                <span class="font-headline text-5xl font-black text-primary">VS</span>
+                <span class="text-xs font-mono text-on-surface-variant mt-1">Gran Final 2026</span>
               </div>
 
-              <!-- Estudiantes LP -->
+              <!-- Estudiantes -->
               <div class="md:col-span-5 flex items-center md:justify-end gap-4">
                 <div class="md:text-right">
+                  <span class="px-2 py-0.5 rounded bg-primary/15 text-primary text-[10px] font-mono font-bold uppercase">Argentina · 4 Títulos</span>
                   <h3 class="font-headline text-2xl font-black text-on-surface">Estudiantes LP</h3>
-                  <p class="text-xs text-on-surface-variant">La Plata, Argentina · DT: Alexander Medina</p>
-                  <p class="text-xs text-primary font-mono mt-0.5">4 Títulos Libertadores (1968, 69, 70, 2009)</p>
+                  <p class="text-xs text-on-surface-variant">DT: Alexander Medina</p>
+                  <p class="text-xs text-primary font-mono mt-1">Goleador: Guido Carrillo (8 goles)</p>
                 </div>
-                <div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-2xl text-primary">
+                <div class="w-20 h-20 rounded-2xl bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-3xl text-primary">
                   EDLP
                 </div>
               </div>
             </div>
 
-            <!-- Comparison Matrix -->
-            <div class="mt-8 pt-6 border-t border-outline-variant grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
-                <div class="flex justify-between text-xs font-mono">
-                  <span class="text-secondary font-bold">Vitor Roque (9G, 3A)</span>
-                  <span class="text-on-surface-variant">Delanteros Estrella</span>
-                  <span class="text-primary font-bold">Guido Carrillo (8G, 3A)</span>
+            <!-- Path to the Final Table -->
+            <div class="mt-8 pt-6 border-t border-outline-variant flex flex-col gap-3">
+              <h4 class="font-headline text-sm font-bold text-on-surface">Camino a la Final de Libertadores 2026</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
+                  <span class="text-xs font-mono text-secondary font-bold">Camino de Palmeiras:</span>
+                  <p class="text-xs text-on-surface-variant leading-relaxed">
+                    • Semifinal (Ida): Palmeiras 2 - 0 Boca Juniors (Vitor Roque, Andreas Pereira)<br>
+                    • Fase de Grupos: Palmeiras 2 - 1 Estudiantes de La Plata
+                  </p>
                 </div>
-                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
-                  <div class="bg-secondary h-full" style="width: 53%;"></div>
-                  <div class="bg-primary h-full" style="width: 47%;"></div>
+                <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
+                  <span class="text-xs font-mono text-primary font-bold">Camino de Estudiantes de La Plata:</span>
+                  <p class="text-xs text-on-surface-variant leading-relaxed">
+                    • Semifinal (Ida): Estudiantes 2 - 1 Flamengo (Guido Carrillo, Edwuin Cetré)<br>
+                    • Semifinal (Vuelta): Flamengo 1 - 1 Estudiantes (Gol histórico de Tiago Palacios 88') [Global 3-2 EDLP clasifica]
+                  </p>
                 </div>
-                <span class="text-[11px] text-on-surface-variant text-center font-mono">Apariciones ofensivas por 90 min</span>
-              </div>
-
-              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
-                <div class="flex justify-between text-xs font-mono">
-                  <span class="text-secondary font-bold">54.2%</span>
-                  <span class="text-on-surface-variant">Posesión Media</span>
-                  <span class="text-primary font-bold">48.8%</span>
-                </div>
-                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
-                  <div class="bg-secondary h-full" style="width: 54%;"></div>
-                  <div class="bg-primary h-full" style="width: 46%;"></div>
-                </div>
-                <span class="text-[11px] text-on-surface-variant text-center font-mono">Control y circulación de balón</span>
-              </div>
-
-              <div class="bg-surface-container p-4 rounded-lg flex flex-col gap-2">
-                <div class="flex justify-between text-xs font-mono">
-                  <span class="text-secondary font-bold">0.68 / PJ</span>
-                  <span class="text-on-surface-variant">Solidez Defensiva (Goles recibidos)</span>
-                  <span class="text-primary font-bold">0.75 / PJ</span>
-                </div>
-                <div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden flex">
-                  <div class="bg-secondary h-full" style="width: 51%;"></div>
-                  <div class="bg-primary h-full" style="width: 49%;"></div>
-                </div>
-                <span class="text-[11px] text-on-surface-variant text-center font-mono">Eficacia en duelos aéreos y corte</span>
-              </div>
-            </div>
-          </section>
-
-          <!-- UCL STANDINGS & HIGHLIGHTS -->
-          <section id="card-ucl-table" class="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col gap-4 shadow-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="font-headline text-lg font-bold text-on-surface">UEFA Champions League — Tabla Única (Fase de Liga)</h3>
-                <p class="font-body text-xs text-on-surface-variant">Los 36 equipos y sus 144 partidos oficiales registrados</p>
-              </div>
-              <span class="font-mono text-xs text-tertiary">Top 8 Directos a 8vos</span>
-            </div>
-
-            <!-- Responsive Table -->
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs font-body border-collapse">
-                <thead>
-                  <tr class="border-b border-outline-variant text-on-surface-variant font-mono text-[11px]">
-                    <th class="py-2.5 px-3">Pos</th>
-                    <th class="py-2.5 px-3">Equipo</th>
-                    <th class="py-2.5 px-2">País</th>
-                    <th class="py-2.5 px-2 text-center">PJ</th>
-                    <th class="py-2.5 px-2 text-center">G</th>
-                    <th class="py-2.5 px-2 text-center">E</th>
-                    <th class="py-2.5 px-2 text-center">P</th>
-                    <th class="py-2.5 px-2 text-center">GF</th>
-                    <th class="py-2.5 px-2 text-center">GC</th>
-                    <th class="py-2.5 px-2 text-center">DG</th>
-                    <th class="py-2.5 px-3 text-right">Pts</th>
-                    <th class="py-2.5 px-3 text-right">Estado</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-outline-variant/50 font-mono">
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">1</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Liverpool</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">7</td>
-                    <td class="py-2.5 px-2 text-center">0</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">17</td>
-                    <td class="py-2.5 px-2 text-center">5</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+12</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">21</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">2</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Barcelona</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">6</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center font-bold text-primary">28</td>
-                    <td class="py-2.5 px-2 text-center">13</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+15</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">3</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Arsenal</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">6</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">17</td>
-                    <td class="py-2.5 px-2 text-center">3</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+14</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">4</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Inter de Milán</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Italia</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">6</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">11</td>
-                    <td class="py-2.5 px-2 text-center font-bold text-secondary">1</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+10</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">19</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">5</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Atlético de Madrid</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">6</td>
-                    <td class="py-2.5 px-2 text-center">0</td>
-                    <td class="py-2.5 px-2 text-center">2</td>
-                    <td class="py-2.5 px-2 text-center">20</td>
-                    <td class="py-2.5 px-2 text-center">12</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+8</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">18</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">6</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Bayer Leverkusen</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Alemania</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">5</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">2</td>
-                    <td class="py-2.5 px-2 text-center">15</td>
-                    <td class="py-2.5 px-2 text-center">7</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+8</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">7</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Lille</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Francia</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">5</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">2</td>
-                    <td class="py-2.5 px-2 text-center">17</td>
-                    <td class="py-2.5 px-2 text-center">10</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+7</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors">
-                    <td class="py-2.5 px-3 font-bold text-secondary">8</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Aston Villa</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">Inglaterra</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">5</td>
-                    <td class="py-2.5 px-2 text-center">1</td>
-                    <td class="py-2.5 px-2 text-center">2</td>
-                    <td class="py-2.5 px-2 text-center">13</td>
-                    <td class="py-2.5 px-2 text-center">6</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+7</td>
-                    <td class="py-2.5 px-3 text-right font-black text-secondary">16</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td>
-                  </tr>
-                  <tr class="hover:bg-surface-container-high transition-colors opacity-80">
-                    <td class="py-2.5 px-3 text-on-surface-variant">11</td>
-                    <td class="py-2.5 px-3 font-bold font-body text-on-surface">Real Madrid</td>
-                    <td class="py-2.5 px-2 text-on-surface-variant">España</td>
-                    <td class="py-2.5 px-2 text-center">8</td>
-                    <td class="py-2.5 px-2 text-center">5</td>
-                    <td class="py-2.5 px-2 text-center">0</td>
-                    <td class="py-2.5 px-2 text-center">3</td>
-                    <td class="py-2.5 px-2 text-center">20</td>
-                    <td class="py-2.5 px-2 text-center">11</td>
-                    <td class="py-2.5 px-2 text-center text-secondary">+9</td>
-                    <td class="py-2.5 px-3 text-right font-black text-on-surface">15</td>
-                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary text-[10px]">Play-offs (16vos)</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- SECTION 3: NBA ANALYTICS -->
-        <!-- ========================================== -->
-        <div id="view-nba" class="view-section hidden flex flex-col gap-8">
-          <div class="border-b border-outline-variant pb-4">
-            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">NBA Advanced Telemetry</h1>
-            <p class="font-body text-xs text-on-surface-variant">Pace, True Shooting %, Eficiencia de tiro y tendencias de posesión</p>
-          </div>
-
-          <!-- NBA Game Card -->
-          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 lg:p-8 flex flex-col gap-6">
-            <div class="flex justify-between items-center">
-              <span class="px-2.5 py-1 rounded bg-secondary/10 text-secondary text-xs font-mono font-bold uppercase">NBA Regular Season Showcase</span>
-              <span class="text-xs font-mono text-on-surface-variant">TD Garden · Boston, MA</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
-              <div class="md:col-span-5 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-xl text-secondary">
-                  BOS
-                </div>
-                <div>
-                  <h3 class="font-headline text-xl font-bold text-on-surface">Boston Celtics</h3>
-                  <p class="text-xs text-on-surface-variant">Récord: 48 - 14 | Net RTG: +10.2</p>
-                </div>
-              </div>
-
-              <div class="md:col-span-2 text-center">
-                <span class="font-headline text-3xl font-black text-primary">VS</span>
-                <p class="text-[11px] font-mono text-on-surface-variant">Línea esperada: -4.5 BOS</p>
-              </div>
-
-              <div class="md:col-span-5 flex items-center md:justify-end gap-4">
-                <div class="md:text-right">
-                  <h3 class="font-headline text-xl font-bold text-on-surface">Denver Nuggets</h3>
-                  <p class="text-xs text-on-surface-variant">Récord: 45 - 19 | Net RTG: +7.8</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center font-black text-xl text-tertiary">
-                  DEN
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-outline-variant">
-              <div class="bg-surface-container p-3 rounded flex flex-col">
-                <span class="text-[11px] font-mono text-on-surface-variant">Pace Proyectado</span>
-                <span class="font-headline text-xl font-extrabold text-on-surface">99.2</span>
-                <span class="text-[10px] text-secondary">Alto ritmo de juego</span>
-              </div>
-              <div class="bg-surface-container p-3 rounded flex flex-col">
-                <span class="text-[11px] font-mono text-on-surface-variant">Offensive Rating</span>
-                <span class="font-headline text-xl font-extrabold text-secondary">122.4</span>
-                <span class="text-[10px] text-on-surface-variant">BOS Top 1 liga</span>
-              </div>
-              <div class="bg-surface-container p-3 rounded flex flex-col">
-                <span class="text-[11px] font-mono text-on-surface-variant">True Shooting %</span>
-                <span class="font-headline text-xl font-extrabold text-tertiary">61.5%</span>
-                <span class="text-[10px] text-on-surface-variant">Eficiencia pura</span>
-              </div>
-              <div class="bg-surface-container p-3 rounded flex flex-col">
-                <span class="text-[11px] font-mono text-on-surface-variant">3PT Frequency</span>
-                <span class="font-headline text-xl font-extrabold text-warning">46.8%</span>
-                <span class="text-[10px] text-on-surface-variant">Volumen exterior</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- SECTION 4: ESPORTS (VALORANT & CS2) -->
+        <!-- SECTION 4: TABLA CHAMPIONS LEAGUE (36 CLUBS) -->
         <!-- ========================================== -->
-        <div id="view-esports" class="view-section hidden flex flex-col gap-8">
+        <div id="view-ucl" class="view-section hidden flex flex-col gap-6">
           <div class="border-b border-outline-variant pb-4">
-            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Esports Quantitative Telemetry</h1>
-            <p class="font-body text-xs text-on-surface-variant">Métricas de rondas de pistolas, ADR, First Kills y retomas de bomba</p>
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">UEFA Champions League 2024/25</h1>
+            <p class="font-body text-xs text-on-surface-variant">Tabla Única de la Fase de Liga tras 144 partidos oficiales disputados</p>
+          </div>
+
+          <div class="bg-surface-container border border-outline-variant rounded-xl p-6 overflow-x-auto shadow-xl">
+            <table class="w-full text-left text-xs font-body border-collapse">
+              <thead>
+                <tr class="border-b border-outline-variant text-on-surface-variant font-mono text-[11px]">
+                  <th class="py-2.5 px-3">Pos</th>
+                  <th class="py-2.5 px-3">Equipo</th>
+                  <th class="py-2.5 px-2">País</th>
+                  <th class="py-2.5 px-2 text-center">PJ</th>
+                  <th class="py-2.5 px-2 text-center">G</th>
+                  <th class="py-2.5 px-2 text-center">E</th>
+                  <th class="py-2.5 px-2 text-center">P</th>
+                  <th class="py-2.5 px-2 text-center">GF</th>
+                  <th class="py-2.5 px-2 text-center">GC</th>
+                  <th class="py-2.5 px-2 text-center">DG</th>
+                  <th class="py-2.5 px-3 text-right">Pts</th>
+                  <th class="py-2.5 px-3 text-right">Clasificación</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/40 font-mono" id="ucl-table-body">
+                <!-- Top rows static for instant paint -->
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">1</td><td class="py-2 px-3 font-bold font-body">Liverpool</td><td class="py-2 px-2 text-on-surface-variant">Inglaterra</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">7</td><td class="py-2 px-2 text-center">0</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">17</td><td class="py-2 px-2 text-center">5</td><td class="py-2 px-2 text-center text-secondary">+12</td><td class="py-2 px-3 text-right font-black text-secondary">21</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">2</td><td class="py-2 px-3 font-bold font-body">Barcelona</td><td class="py-2 px-2 text-on-surface-variant">España</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">6</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center font-bold text-primary">28</td><td class="py-2 px-2 text-center">13</td><td class="py-2 px-2 text-center text-secondary">+15</td><td class="py-2 px-3 text-right font-black text-secondary">19</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">3</td><td class="py-2 px-3 font-bold font-body">Arsenal</td><td class="py-2 px-2 text-on-surface-variant">Inglaterra</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">6</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">17</td><td class="py-2 px-2 text-center">3</td><td class="py-2 px-2 text-center text-secondary">+14</td><td class="py-2 px-3 text-right font-black text-secondary">19</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">4</td><td class="py-2 px-3 font-bold font-body">Inter de Milán</td><td class="py-2 px-2 text-on-surface-variant">Italia</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">6</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">11</td><td class="py-2 px-2 text-center font-bold text-secondary">1</td><td class="py-2 px-2 text-center text-secondary">+10</td><td class="py-2 px-3 text-right font-black text-secondary">19</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">5</td><td class="py-2 px-3 font-bold font-body">Atlético de Madrid</td><td class="py-2 px-2 text-on-surface-variant">España</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">6</td><td class="py-2 px-2 text-center">0</td><td class="py-2 px-2 text-center">2</td><td class="py-2 px-2 text-center">20</td><td class="py-2 px-2 text-center">12</td><td class="py-2 px-2 text-center text-secondary">+8</td><td class="py-2 px-3 text-right font-black text-secondary">18</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">6</td><td class="py-2 px-3 font-bold font-body">Bayer Leverkusen</td><td class="py-2 px-2 text-on-surface-variant">Alemania</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">5</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">2</td><td class="py-2 px-2 text-center">15</td><td class="py-2 px-2 text-center">7</td><td class="py-2 px-2 text-center text-secondary">+8</td><td class="py-2 px-3 text-right font-black text-secondary">16</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">7</td><td class="py-2 px-3 font-bold font-body">Lille</td><td class="py-2 px-2 text-on-surface-variant">Francia</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">5</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">2</td><td class="py-2 px-2 text-center">17</td><td class="py-2 px-2 text-center">10</td><td class="py-2 px-2 text-center text-secondary">+7</td><td class="py-2 px-3 text-right font-black text-secondary">16</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors"><td class="py-2 px-3 font-bold text-secondary">8</td><td class="py-2 px-3 font-bold font-body">Aston Villa</td><td class="py-2 px-2 text-on-surface-variant">Inglaterra</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">5</td><td class="py-2 px-2 text-center">1</td><td class="py-2 px-2 text-center">2</td><td class="py-2 px-2 text-center">13</td><td class="py-2 px-2 text-center">6</td><td class="py-2 px-2 text-center text-secondary">+7</td><td class="py-2 px-3 text-right font-black text-secondary">16</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-[10px]">Octavos Directo</span></td></tr>
+                <tr class="hover:bg-surface-container-high transition-colors opacity-80"><td class="py-2 px-3 text-on-surface-variant">11</td><td class="py-2 px-3 font-bold font-body">Real Madrid</td><td class="py-2 px-2 text-on-surface-variant">España</td><td class="py-2 px-2 text-center">8</td><td class="py-2 px-2 text-center">5</td><td class="py-2 px-2 text-center">0</td><td class="py-2 px-2 text-center">3</td><td class="py-2 px-2 text-center">20</td><td class="py-2 px-2 text-center">11</td><td class="py-2 px-2 text-center text-secondary">+9</td><td class="py-2 px-3 text-right font-black text-on-surface">15</td><td class="py-2 px-3 text-right"><span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary text-[10px]">Play-offs (16vos)</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: PLANTELES DE JUGADORES (2025-26) -->
+        <!-- ========================================== -->
+        <div id="view-plantillas" class="view-section hidden flex flex-col gap-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant pb-4">
+            <div>
+              <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Planteles Finalistas (2025 - 2026)</h1>
+              <p class="font-body text-xs text-on-surface-variant">Fichas técnicas y rendimiento individual de Palmeiras y Estudiantes de La Plata</p>
+            </div>
+
+            <!-- Team selector -->
+            <div class="flex items-center gap-2">
+              <button onclick="renderRoster('Palmeiras')" id="btn-roster-palmeiras" class="roster-filter active px-4 py-2 rounded-md bg-secondary text-on-secondary text-xs font-bold font-headline transition-colors">SE Palmeiras (19 Jug.)</button>
+              <button onclick="renderRoster('Estudiantes de La Plata')" id="btn-roster-estudiantes" class="roster-filter px-4 py-2 rounded-md bg-surface-container-high text-on-surface text-xs font-bold font-headline hover:bg-surface-container-highest transition-colors">Estudiantes LP (20 Jug.)</button>
+            </div>
+          </div>
+
+          <!-- Roster Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="roster-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: NBA TELEMETRY -->
+        <!-- ========================================== -->
+        <div id="view-nba" class="view-section hidden flex flex-col gap-6">
+          <div class="border-b border-outline-variant pb-4">
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">NBA Advanced Analytics</h1>
+            <p class="font-body text-xs text-on-surface-variant">Telemetría de posesiones, True Shooting y distribución espacial de tiro</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
-              <span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary text-xs font-mono font-bold w-fit">VALORANT Champions Tour</span>
-              <div class="flex justify-between items-center">
-                <span class="font-headline text-lg font-bold">Sentinels</span>
-                <span class="font-mono text-sm text-primary font-bold">VS</span>
-                <span class="font-headline text-lg font-bold">Fnatic</span>
+              <span class="px-2.5 py-1 rounded bg-secondary/15 text-secondary text-xs font-mono font-bold w-fit uppercase">Showcase Este vs Oeste</span>
+              <div class="flex justify-between items-center py-2">
+                <span class="font-headline text-xl font-bold">Boston Celtics</span>
+                <span class="font-headline text-2xl font-black text-primary">118 - 112</span>
+                <span class="font-headline text-xl font-bold">Denver Nuggets</span>
               </div>
-              <div class="space-y-2 text-xs font-mono pt-2">
-                <div class="flex justify-between"><span class="text-on-surface-variant">Pistol Round Winrate:</span><span class="text-secondary font-bold">62.5% vs 58.0%</span></div>
-                <div class="flex justify-between"><span class="text-on-surface-variant">Eco Conversion:</span><span class="text-tertiary font-bold">24.2%</span></div>
+              <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono pt-3 border-t border-outline-variant">
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">Pace</span><span class="text-secondary font-bold text-sm">99.2</span></div>
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">ORTG BOS</span><span class="text-secondary font-bold text-sm">122.4</span></div>
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">TS% DEN</span><span class="text-tertiary font-bold text-sm">61.5%</span></div>
               </div>
             </div>
 
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
-              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary text-xs font-mono font-bold w-fit">Counter-Strike 2 Major</span>
-              <div class="flex justify-between items-center">
-                <span class="font-headline text-lg font-bold">FaZe Clan</span>
-                <span class="font-mono text-sm text-primary font-bold">VS</span>
-                <span class="font-headline text-lg font-bold">Team Vitality</span>
+              <span class="px-2.5 py-1 rounded bg-primary/15 text-primary text-xs font-mono font-bold w-fit uppercase">Conferencia Oeste</span>
+              <div class="flex justify-between items-center py-2">
+                <span class="font-headline text-xl font-bold">GS Warriors</span>
+                <span class="font-headline text-2xl font-black text-primary">105 - 109</span>
+                <span class="font-headline text-xl font-bold">LA Lakers</span>
               </div>
-              <div class="space-y-2 text-xs font-mono pt-2">
-                <div class="flex justify-between"><span class="text-on-surface-variant">Opening Duel Winrate:</span><span class="text-secondary font-bold">54.8% ZywOo</span></div>
-                <div class="flex justify-between"><span class="text-on-surface-variant">Clutch Success Rate:</span><span class="text-warning font-bold">36.5%</span></div>
+              <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono pt-3 border-t border-outline-variant">
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">Pace</span><span class="text-secondary font-bold text-sm">98.0</span></div>
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">Paint Pts</span><span class="text-secondary font-bold text-sm">54 LAL</span></div>
+                <div class="bg-surface-container p-2 rounded"><span class="text-on-surface-variant block">3PM GSW</span><span class="text-tertiary font-bold text-sm">16 Triples</span></div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- SECTION 5: MODELO & PRONÓSTICOS AUDITADOS -->
+        <!-- SECTION 7: MODELO CUANTITATIVO -->
         <!-- ========================================== -->
-        <div id="view-analisis" class="view-section hidden flex flex-col gap-8">
+        <div id="view-analisis" class="view-section hidden flex flex-col gap-6">
           <div class="border-b border-outline-variant pb-4">
-            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Arquitectura del Modelo Predictivo v4.2</h1>
-            <p class="font-body text-xs text-on-surface-variant">Metodología cuantitativa y separación de datos verificados</p>
+            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">FijasPro Quantitative Engine v4.2</h1>
+            <p class="font-body text-xs text-on-surface-variant">Simulación de probabilidad y análisis sin sesgo de apuestas</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
-              <span class="material-symbols-outlined text-primary text-3xl">model_training</span>
-              <h3 class="font-headline text-base font-bold text-on-surface">1. Ingesta de Telemetría</h3>
+            <div class="bg-surface-container p-6 rounded-xl border border-outline-variant flex flex-col gap-3">
+              <span class="material-symbols-outlined text-primary text-3xl">sports_score</span>
+              <h3 class="font-headline text-lg font-bold">Expected Goals (xG)</h3>
               <p class="text-xs text-on-surface-variant leading-relaxed">
-                Recopilación segundo a segundo de coordenadas de tiro, velocidad de presión, fatiga acumulada y minutos de juego.
+                Cada disparo de los 152 partidos es categorizado por distancia a portería, ángulo y presión de la marca defensiva.
               </p>
             </div>
-            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
+            <div class="bg-surface-container p-6 rounded-xl border border-outline-variant flex flex-col gap-3">
               <span class="material-symbols-outlined text-secondary text-3xl">psychology</span>
-              <h3 class="font-headline text-base font-bold text-on-surface">2. Simulación Monte Carlo</h3>
+              <h3 class="font-headline text-lg font-bold">Simulador Monte Carlo</h3>
               <p class="text-xs text-on-surface-variant leading-relaxed">
-                10,000 iteraciones por encuentro para calcular la distribución real de probabilidad de goles y posesiones.
+                Calculamos la probabilidad real de gol en la final Palmeiras vs Estudiantes evaluando la tasa de conversión de Vitor Roque y Guido Carrillo.
               </p>
             </div>
-            <div class="bg-surface-container p-5 rounded-lg flex flex-col gap-3 border border-outline-variant">
-              <span class="material-symbols-outlined text-tertiary text-3xl">verified_user</span>
-              <h3 class="font-headline text-base font-bold text-on-surface">3. Auditoría Abierta</h3>
+            <div class="bg-surface-container p-6 rounded-xl border border-outline-variant flex flex-col gap-3">
+              <span class="material-symbols-outlined text-tertiary text-3xl">speed</span>
+              <h3 class="font-headline text-lg font-bold">Telemetría en Vivo</h3>
               <p class="text-xs text-on-surface-variant leading-relaxed">
-                Sin intermediarios ni cuotas de azar. Solo métricas cuantitativas reproducibles para analistas deportivos.
+                Los datos provienen directamente de repositorios abiertos en GitHub garantizando transparencia total.
               </p>
-            </div>
-          </div>
-        </div>
-
-        <div id="view-pronosticos" class="view-section hidden flex flex-col gap-8">
-          <div class="border-b border-outline-variant pb-4">
-            <h1 class="font-headline text-2xl lg:text-3xl font-extrabold text-on-surface">Pronósticos y Proyecciones Auditadas</h1>
-            <p class="font-body text-xs text-on-surface-variant">Historial público con métricas de acierto y valor esperado</p>
-          </div>
-
-          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
-            <div class="flex items-center justify-between text-xs font-mono border-b border-outline-variant pb-3">
-              <span class="text-on-surface-variant">Partido Proyectado</span>
-              <span class="text-on-surface-variant">Métrica Analizada</span>
-              <span class="text-on-surface-variant">Confianza</span>
-            </div>
-            <div class="flex items-center justify-between text-xs font-mono py-2">
-              <span class="font-bold text-on-surface">Palmeiras vs Estudiantes LP</span>
-              <span class="text-secondary font-semibold">Total Goles: Menos de 2.5 (xG 2.15)</span>
-              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary font-bold">84% ALTA</span>
-            </div>
-            <div class="flex items-center justify-between text-xs font-mono py-2">
-              <span class="font-bold text-on-surface">Liverpool vs Real Madrid</span>
-              <span class="text-secondary font-semibold">xG Liverpool > 1.80</span>
-              <span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary font-bold">89% VERIFICADO</span>
             </div>
           </div>
         </div>
@@ -809,168 +556,309 @@
     </div>
   </div>
 
-  <!-- INTERACTIVE MODAL (Match / Telemetry Details) -->
-  <div id="telemetry-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-surface-container border border-outline-variant max-w-2xl w-full rounded-xl overflow-hidden shadow-2xl flex flex-col">
+  <!-- INTERACTIVE MODAL FOR MATCH DETAILS -->
+  <div id="match-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant max-w-2xl w-full rounded-2xl overflow-hidden shadow-2xl flex flex-col">
       <div class="p-6 border-b border-outline-variant flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
-          <h3 id="modal-title" class="font-headline text-lg font-bold text-on-surface">Telemetría de Partido</h3>
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-secondary"></span>
+          <div>
+            <h3 id="modal-match-title" class="font-headline text-lg font-bold text-on-surface">Detalle de Partido</h3>
+            <span id="modal-match-stage" class="text-xs font-mono text-on-surface-variant">Competición</span>
+          </div>
         </div>
-        <button onclick="closeModal()" class="text-on-surface-variant hover:text-on-surface p-1 rounded">
-          <span class="material-symbols-outlined text-xl">close</span>
+        <button onclick="closeMatchModal()" class="text-on-surface-variant hover:text-on-surface p-1 rounded">
+          <span class="material-symbols-outlined text-2xl">close</span>
         </button>
       </div>
-      <div id="modal-body" class="p-6 flex flex-col gap-4 text-xs font-mono text-on-surface">
-        <!-- Content inserted dynamically -->
+
+      <div class="p-6 flex flex-col gap-6" id="modal-match-body">
+        <!-- Injected via JS -->
       </div>
+
       <div class="p-4 bg-surface-container-lowest border-t border-outline-variant flex justify-end">
-        <button onclick="closeModal()" class="px-4 py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest text-xs font-bold transition-colors">
+        <button onclick="closeMatchModal()" class="px-5 py-2 rounded-md bg-surface-container-high text-on-surface hover:bg-surface-container-highest text-xs font-bold transition-colors">
           Cerrar
         </button>
       </div>
     </div>
   </div>
 
+  <!-- RAW DATA EMBEDDED SAFELY -->
   <script>
+    const ALL_MATCHES = [{"id": "lib-1", "comp": "Copa Libertadores 2025", "stage": "Fase de Grupos", "date": "2025-05-14", "home": "Palmeiras", "away": "Estudiantes de La Plata", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Allianz Parque (São Paulo)", "scorers": "Vitor Roque 34', Raphael Veiga 76' (PAL); Guido Carrillo 55' (EDLP)", "xg_home": 2.0, "xg_away": 1.3}, {"id": "lib-2", "comp": "Copa Libertadores 2025", "stage": "Fase de Grupos", "date": "2025-05-28", "home": "Estudiantes de La Plata", "away": "Palmeiras", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio UNO (La Plata)", "scorers": "Tiago Palacios 42' (EDLP); Flaco López 81' (PAL)", "xg_home": 1.6, "xg_away": 1.3}, {"id": "lib-3", "comp": "Copa Libertadores 2026", "stage": "Semifinal (Ida)", "date": "2026-10-21", "home": "Palmeiras", "away": "Boca Juniors", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Allianz Parque (São Paulo)", "scorers": "Vitor Roque 22', Andreas Pereira 68' (PAL)", "xg_home": 2.0, "xg_away": 0.9}, {"id": "lib-4", "comp": "Copa Libertadores 2026", "stage": "Semifinal (Ida)", "date": "2026-10-22", "home": "Estudiantes de La Plata", "away": "Flamengo", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio UNO (La Plata)", "scorers": "Guido Carrillo 14', Edwuin Cetré 78' (EDLP); Pedro 45' (FLA)", "xg_home": 2.0, "xg_away": 1.3}, {"id": "lib-5", "comp": "Copa Libertadores 2026", "stage": "Semifinal (Vuelta)", "date": "2026-10-29", "home": "Flamengo", "away": "Estudiantes de La Plata", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Maracanã (Río de Janeiro)", "scorers": "Arrascaeta 31' (FLA); Tiago Palacios 88' (EDLP) [Global 2-3 EDLP Clasifica]", "xg_home": 1.6, "xg_away": 1.3}, {"id": "lib-6", "comp": "Copa Libertadores 2026", "stage": "GRAN FINAL", "date": "2026-11-28", "home": "Palmeiras", "away": "Estudiantes de La Plata", "home_score": "-", "away_score": "-", "status": "GRAN FINAL", "venue": "Sede Única Conmebol", "scorers": "Gran Final Definitoria Copa Libertadores 2026", "xg_home": 1.45, "xg_away": 1.3}, {"id": "ucl-1", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "Juventus", "away": "PSV Eindhoven", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-2", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "Young Boys", "away": "Aston Villa", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-3", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "Bayern Múnich", "away": "Dinamo Zagreb", "home_score": 9, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 5.15, "xg_away": 1.6}, {"id": "ucl-4", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "AC Milan", "away": "Liverpool", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-5", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "Real Madrid", "away": "Stuttgart", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-6", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-17", "home": "Sporting CP", "away": "Lille", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-7", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Sparta Praga", "away": "Red Bull Salzburgo", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-8", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Bologna", "away": "Shakhtar Donetsk", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-9", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Celtic", "away": "Slovan Bratislava", "home_score": 5, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.2}, {"id": "ucl-10", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Club Brujas", "away": "Borussia Dortmund", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-11", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Manchester City", "away": "Inter de Milán", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-12", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-18", "home": "Paris Saint-Germain", "away": "Girona", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-13", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "Feyenoord", "away": "Bayer Leverkusen", "home_score": 0, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.4}, {"id": "ucl-14", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "Estrella Roja", "away": "Benfica", "home_score": 1, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.6}, {"id": "ucl-15", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "AS Mónaco", "away": "Barcelona", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-16", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "Atalanta", "away": "Arsenal", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-17", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "Atlético de Madrid", "away": "RB Leipzig", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-18", "comp": "UEFA Champions League", "stage": "Jornada 1", "date": "2024-09-19", "home": "Brest", "away": "Sturm Graz", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-19", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Red Bull Salzburgo", "away": "Brest", "home_score": 0, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.4}, {"id": "ucl-20", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Stuttgart", "away": "Sparta Praga", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-21", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Arsenal", "away": "Paris Saint-Germain", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-22", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Bayer Leverkusen", "away": "AC Milan", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-23", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Borussia Dortmund", "away": "Celtic", "home_score": 7, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 4.25, "xg_away": 1.2}, {"id": "ucl-24", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Barcelona", "away": "Young Boys", "home_score": 5, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 0.8}, {"id": "ucl-25", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Inter de Milán", "away": "Estrella Roja", "home_score": 4, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 0.8}, {"id": "ucl-26", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "PSV Eindhoven", "away": "Sporting CP", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-27", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-01", "home": "Slovan Bratislava", "away": "Manchester City", "home_score": 0, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.4}, {"id": "ucl-28", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Shakhtar Donetsk", "away": "Atalanta", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-29", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Girona", "away": "Feyenoord", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-30", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Aston Villa", "away": "Bayern Múnich", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-31", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Dinamo Zagreb", "away": "AS Mónaco", "home_score": 2, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.6}, {"id": "ucl-32", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Liverpool", "away": "Bologna", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-33", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Lille", "away": "Real Madrid", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-34", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "RB Leipzig", "away": "Juventus", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-35", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Sturm Graz", "away": "Club Brujas", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-36", "comp": "UEFA Champions League", "stage": "Jornada 2", "date": "2024-10-02", "home": "Benfica", "away": "Atlético de Madrid", "home_score": 4, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 0.8}, {"id": "ucl-37", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "AC Milan", "away": "Club Brujas", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-38", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "AS Mónaco", "away": "Estrella Roja", "home_score": 5, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.2}, {"id": "ucl-39", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Arsenal", "away": "Shakhtar Donetsk", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-40", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Aston Villa", "away": "Bologna", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-41", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Girona", "away": "Slovan Bratislava", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-42", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Juventus", "away": "Stuttgart", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-43", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Paris Saint-Germain", "away": "PSV Eindhoven", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-44", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Real Madrid", "away": "Borussia Dortmund", "home_score": 5, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.6}, {"id": "ucl-45", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-22", "home": "Sturm Graz", "away": "Sporting CP", "home_score": 0, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.6}, {"id": "ucl-46", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Atalanta", "away": "Celtic", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-47", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Brest", "away": "Bayer Leverkusen", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-48", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Atlético de Madrid", "away": "Lille", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-49", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Young Boys", "away": "Inter de Milán", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-50", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Barcelona", "away": "Bayern Múnich", "home_score": 4, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 1.2}, {"id": "ucl-51", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Red Bull Salzburgo", "away": "Dinamo Zagreb", "home_score": 0, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.6}, {"id": "ucl-52", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Manchester City", "away": "Sparta Praga", "home_score": 5, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 0.8}, {"id": "ucl-53", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "RB Leipzig", "away": "Liverpool", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-54", "comp": "UEFA Champions League", "stage": "Jornada 3", "date": "2024-10-23", "home": "Benfica", "away": "Feyenoord", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-55", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "PSV Eindhoven", "away": "Girona", "home_score": 4, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 0.8}, {"id": "ucl-56", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Slovan Bratislava", "away": "Dinamo Zagreb", "home_score": 1, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.4}, {"id": "ucl-57", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Bologna", "away": "AS Mónaco", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-58", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Borussia Dortmund", "away": "Sturm Graz", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-59", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Celtic", "away": "RB Leipzig", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-60", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Liverpool", "away": "Bayer Leverkusen", "home_score": 4, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 0.8}, {"id": "ucl-61", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Lille", "away": "Juventus", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-62", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Real Madrid", "away": "AC Milan", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-63", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-05", "home": "Sporting CP", "away": "Manchester City", "home_score": 4, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 1.2}, {"id": "ucl-64", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Club Brujas", "away": "Aston Villa", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-65", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Shakhtar Donetsk", "away": "Young Boys", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-66", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Sparta Praga", "away": "Brest", "home_score": 1, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.6}, {"id": "ucl-67", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Bayern Múnich", "away": "Benfica", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-68", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Estrella Roja", "away": "Barcelona", "home_score": 2, "away_score": 5, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.8}, {"id": "ucl-69", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Feyenoord", "away": "Red Bull Salzburgo", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-70", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Inter de Milán", "away": "Arsenal", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-71", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Paris Saint-Germain", "away": "Atlético de Madrid", "home_score": 1, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.6}, {"id": "ucl-72", "comp": "UEFA Champions League", "stage": "Jornada 4", "date": "2024-11-06", "home": "Stuttgart", "away": "Atalanta", "home_score": 0, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.6}, {"id": "ucl-73", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Sparta Praga", "away": "Atlético de Madrid", "home_score": 0, "away_score": 6, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 3.2}, {"id": "ucl-74", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Slovan Bratislava", "away": "AC Milan", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-75", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Bayer Leverkusen", "away": "Red Bull Salzburgo", "home_score": 5, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 0.8}, {"id": "ucl-76", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Young Boys", "away": "Atalanta", "home_score": 1, "away_score": 6, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 3.2}, {"id": "ucl-77", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Barcelona", "away": "Brest", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-78", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Bayern Múnich", "away": "Paris Saint-Germain", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-79", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Inter de Milán", "away": "RB Leipzig", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-80", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Manchester City", "away": "Feyenoord", "home_score": 3, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 2.0}, {"id": "ucl-81", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-26", "home": "Sporting CP", "away": "Arsenal", "home_score": 1, "away_score": 5, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.8}, {"id": "ucl-82", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Estrella Roja", "away": "Stuttgart", "home_score": 5, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.2}, {"id": "ucl-83", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Sturm Graz", "away": "Girona", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-84", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "AS Mónaco", "away": "Benfica", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-85", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Aston Villa", "away": "Juventus", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-86", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Bologna", "away": "Lille", "home_score": 1, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.6}, {"id": "ucl-87", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Celtic", "away": "Club Brujas", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-88", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Dinamo Zagreb", "away": "Borussia Dortmund", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-89", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "Liverpool", "away": "Real Madrid", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-90", "comp": "UEFA Champions League", "stage": "Jornada 5", "date": "2024-11-27", "home": "PSV Eindhoven", "away": "Shakhtar Donetsk", "home_score": 3, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.6}, {"id": "ucl-91", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Girona", "away": "Liverpool", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-92", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Dinamo Zagreb", "away": "Celtic", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-93", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Atalanta", "away": "Real Madrid", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-94", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Bayer Leverkusen", "away": "Inter de Milán", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-95", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Club Brujas", "away": "Sporting CP", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-96", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Red Bull Salzburgo", "away": "Paris Saint-Germain", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-97", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Shakhtar Donetsk", "away": "Bayern Múnich", "home_score": 1, "away_score": 5, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.8}, {"id": "ucl-98", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "RB Leipzig", "away": "Aston Villa", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-99", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-10", "home": "Brest", "away": "PSV Eindhoven", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-100", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Atlético de Madrid", "away": "Slovan Bratislava", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-101", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Lille", "away": "Sturm Graz", "home_score": 3, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.6}, {"id": "ucl-102", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "AC Milan", "away": "Estrella Roja", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-103", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Arsenal", "away": "AS Mónaco", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-104", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Borussia Dortmund", "away": "Barcelona", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-105", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Feyenoord", "away": "Sparta Praga", "home_score": 4, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 1.6}, {"id": "ucl-106", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Juventus", "away": "Manchester City", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-107", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Benfica", "away": "Bologna", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-108", "comp": "UEFA Champions League", "stage": "Jornada 6", "date": "2024-12-11", "home": "Stuttgart", "away": "Young Boys", "home_score": 5, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.2}, {"id": "ucl-109", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "AS Mónaco", "away": "Aston Villa", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-110", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Atalanta", "away": "Sturm Graz", "home_score": 5, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 0.8}, {"id": "ucl-111", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Atlético de Madrid", "away": "Bayer Leverkusen", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-112", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Bologna", "away": "Borussia Dortmund", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-113", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Club Brujas", "away": "Juventus", "home_score": 0, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 0.8}, {"id": "ucl-114", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Estrella Roja", "away": "PSV Eindhoven", "home_score": 2, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 2.0}, {"id": "ucl-115", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Liverpool", "away": "Lille", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-116", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Slovan Bratislava", "away": "Stuttgart", "home_score": 1, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.0}, {"id": "ucl-117", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-21", "home": "Benfica", "away": "Barcelona", "home_score": 4, "away_score": 5, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 2.8}, {"id": "ucl-118", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Shakhtar Donetsk", "away": "Brest", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-119", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "RB Leipzig", "away": "Sporting CP", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-120", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "AC Milan", "away": "Girona", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-121", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Sparta Praga", "away": "Inter de Milán", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-122", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Arsenal", "away": "Dinamo Zagreb", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-123", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Celtic", "away": "Young Boys", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-124", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Feyenoord", "away": "Bayern Múnich", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-125", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Paris Saint-Germain", "away": "Manchester City", "home_score": 4, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 1.6}, {"id": "ucl-126", "comp": "UEFA Champions League", "stage": "Jornada 7", "date": "2025-01-22", "home": "Real Madrid", "away": "Red Bull Salzburgo", "home_score": 5, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.35, "xg_away": 1.2}, {"id": "ucl-127", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Aston Villa", "away": "Celtic", "home_score": 4, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.9, "xg_away": 1.6}, {"id": "ucl-128", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Bayer Leverkusen", "away": "Sparta Praga", "home_score": 2, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 0.8}, {"id": "ucl-129", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Borussia Dortmund", "away": "Shakhtar Donetsk", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-130", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Young Boys", "away": "Estrella Roja", "home_score": 0, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.2}, {"id": "ucl-131", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Barcelona", "away": "Atalanta", "home_score": 2, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.6}, {"id": "ucl-132", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Bayern Múnich", "away": "Slovan Bratislava", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-133", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Inter de Milán", "away": "AS Mónaco", "home_score": 3, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 0.8}, {"id": "ucl-134", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Red Bull Salzburgo", "away": "Atlético de Madrid", "home_score": 1, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.4}, {"id": "ucl-135", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Girona", "away": "Arsenal", "home_score": 1, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.6}, {"id": "ucl-136", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Dinamo Zagreb", "away": "AC Milan", "home_score": 2, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.0, "xg_away": 1.2}, {"id": "ucl-137", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Juventus", "away": "Benfica", "home_score": 0, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 1.6}, {"id": "ucl-138", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Lille", "away": "Feyenoord", "home_score": 6, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 3.8, "xg_away": 1.2}, {"id": "ucl-139", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Manchester City", "away": "Club Brujas", "home_score": 3, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.2}, {"id": "ucl-140", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "PSV Eindhoven", "away": "Liverpool", "home_score": 3, "away_score": 2, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 2.45, "xg_away": 1.6}, {"id": "ucl-141", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Sturm Graz", "away": "RB Leipzig", "home_score": 1, "away_score": 0, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 0.8}, {"id": "ucl-142", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Sporting CP", "away": "Bologna", "home_score": 1, "away_score": 1, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 1.2}, {"id": "ucl-143", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Brest", "away": "Real Madrid", "home_score": 0, "away_score": 3, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.1, "xg_away": 2.0}, {"id": "ucl-144", "comp": "UEFA Champions League", "stage": "Jornada 8", "date": "2025-01-29", "home": "Stuttgart", "away": "Paris Saint-Germain", "home_score": 1, "away_score": 4, "status": "FINALIZADO", "venue": "Estadio Europeo", "xg_home": 1.55, "xg_away": 2.4}, {"id": "nba-1", "comp": "NBA Regular Season", "stage": "Conferencia Este vs Oeste", "date": "2026-11-23", "home": "Boston Celtics", "away": "Denver Nuggets", "home_score": 118, "away_score": 112, "status": "FINALIZADO", "venue": "TD Garden (Boston, MA)", "xg_home": 122.4, "xg_away": 116.8}, {"id": "nba-2", "comp": "NBA Regular Season", "stage": "Showcase", "date": "2026-11-23", "home": "Golden State Warriors", "away": "Los Angeles Lakers", "home_score": 105, "away_score": 109, "status": "FINALIZADO", "venue": "Chase Center (San Francisco)", "xg_home": 111.0, "xg_away": 114.5}];
+    const ALL_PLAYERS = [{"player_id": "101", "team_id": "1", "team_name": "Palmeiras", "name": "Weverton", "jersey_number": "21", "position": "Arquero", "nationality": "Brasil", "age": "38", "height_cm": "189", "foot": "Derecho", "market_value_eur": "1800000"}, {"player_id": "102", "team_id": "1", "team_name": "Palmeiras", "name": "Carlos Miguel", "jersey_number": "1", "position": "Arquero", "nationality": "Brasil", "age": "27", "height_cm": "204", "foot": "Derecho", "market_value_eur": "6000000"}, {"player_id": "103", "team_id": "1", "team_name": "Palmeiras", "name": "Gustavo Gómez", "jersey_number": "15", "position": "Defensa Central", "nationality": "Paraguay", "age": "32", "height_cm": "185", "foot": "Derecho", "market_value_eur": "8500000"}, {"player_id": "104", "team_id": "1", "team_name": "Palmeiras", "name": "Murilo", "jersey_number": "26", "position": "Defensa Central", "nationality": "Brasil", "age": "28", "height_cm": "188", "foot": "Derecho", "market_value_eur": "9000000"}, {"player_id": "105", "team_id": "1", "team_name": "Palmeiras", "name": "Bruno Fuchs", "jersey_number": "3", "position": "Defensa Central", "nationality": "Brasil", "age": "26", "height_cm": "184", "foot": "Derecho", "market_value_eur": "4500000"}, {"player_id": "106", "team_id": "1", "team_name": "Palmeiras", "name": "Joaquín Piquerez", "jersey_number": "22", "position": "Lateral Izquierdo", "nationality": "Uruguay", "age": "27", "height_cm": "184", "foot": "Izquierdo", "market_value_eur": "12000000"}, {"player_id": "107", "team_id": "1", "team_name": "Palmeiras", "name": "Jefté", "jersey_number": "6", "position": "Lateral Izquierdo", "nationality": "Brasil", "age": "22", "height_cm": "180", "foot": "Izquierdo", "market_value_eur": "4000000"}, {"player_id": "108", "team_id": "1", "team_name": "Palmeiras", "name": "Agustín Giay", "jersey_number": "4", "position": "Lateral Derecho", "nationality": "Argentina", "age": "22", "height_cm": "180", "foot": "Derecho", "market_value_eur": "8000000"}, {"player_id": "109", "team_id": "1", "team_name": "Palmeiras", "name": "Khellven", "jersey_number": "2", "position": "Lateral Derecho", "nationality": "Brasil", "age": "24", "height_cm": "176", "foot": "Derecho", "market_value_eur": "6500000"}, {"player_id": "110", "team_id": "1", "team_name": "Palmeiras", "name": "Aníbal Moreno", "jersey_number": "5", "position": "Mediocampista Defensivo", "nationality": "Argentina", "age": "26", "height_cm": "178", "foot": "Derecho", "market_value_eur": "12000000"}, {"player_id": "111", "team_id": "1", "team_name": "Palmeiras", "name": "Richard Ríos", "jersey_number": "27", "position": "Mediocampista Central", "nationality": "Colombia", "age": "25", "height_cm": "185", "foot": "Derecho", "market_value_eur": "15000000"}, {"player_id": "112", "team_id": "1", "team_name": "Palmeiras", "name": "Andreas Pereira", "jersey_number": "18", "position": "Mediocampista Central", "nationality": "Brasil", "age": "29", "height_cm": "178", "foot": "Derecho", "market_value_eur": "20000000"}, {"player_id": "113", "team_id": "1", "team_name": "Palmeiras", "name": "Lucas Evangelista", "jersey_number": "8", "position": "Mediocampista Central", "nationality": "Brasil", "age": "30", "height_cm": "181", "foot": "Izquierdo", "market_value_eur": "4500000"}, {"player_id": "114", "team_id": "1", "team_name": "Palmeiras", "name": "Maurício", "jersey_number": "17", "position": "Mediocampista Ofensivo", "nationality": "Brasil", "age": "24", "height_cm": "174", "foot": "Izquierdo", "market_value_eur": "14000000"}, {"player_id": "115", "team_id": "1", "team_name": "Palmeiras", "name": "Raphael Veiga", "jersey_number": "23", "position": "Mediocampista Ofensivo", "nationality": "Brasil", "age": "30", "height_cm": "178", "foot": "Izquierdo", "market_value_eur": "13000000"}, {"player_id": "116", "team_id": "1", "team_name": "Palmeiras", "name": "Felipe Anderson", "jersey_number": "9", "position": "Extremo Derecho", "nationality": "Brasil", "age": "32", "height_cm": "175", "foot": "Derecho", "market_value_eur": "7000000"}, {"player_id": "117", "team_id": "1", "team_name": "Palmeiras", "name": "Facundo Torres", "jersey_number": "11", "position": "Extremo Izquierdo", "nationality": "Uruguay", "age": "25", "height_cm": "175", "foot": "Izquierdo", "market_value_eur": "14000000"}, {"player_id": "118", "team_id": "1", "team_name": "Palmeiras", "name": "Vitor Roque", "jersey_number": "19", "position": "Delantero Centro", "nationality": "Brasil", "age": "21", "height_cm": "172", "foot": "Derecho", "market_value_eur": "30000000"}, {"player_id": "119", "team_id": "1", "team_name": "Palmeiras", "name": "José Manuel López (Flaco)", "jersey_number": "42", "position": "Delantero Centro", "nationality": "Argentina", "age": "25", "height_cm": "190", "foot": "Izquierdo", "market_value_eur": "10000000"}, {"player_id": "201", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Fernando Muslera", "jersey_number": "1", "position": "Arquero", "nationality": "Uruguay", "age": "39", "height_cm": "190", "foot": "Derecho", "market_value_eur": "1200000"}, {"player_id": "202", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Fabricio Iacovich", "jersey_number": "12", "position": "Arquero", "nationality": "Argentina", "age": "23", "height_cm": "188", "foot": "Derecho", "market_value_eur": "2000000"}, {"player_id": "203", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Leandro González Pírez", "jersey_number": "2", "position": "Defensa Central", "nationality": "Argentina", "age": "34", "height_cm": "185", "foot": "Derecho", "market_value_eur": "1500000"}, {"player_id": "204", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Marcos Rojo", "jersey_number": "6", "position": "Defensa Central", "nationality": "Argentina", "age": "35", "height_cm": "187", "foot": "Izquierdo", "market_value_eur": "1800000"}, {"player_id": "205", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Santiago Núñez", "jersey_number": "4", "position": "Defensa Central", "nationality": "Argentina", "age": "24", "height_cm": "186", "foot": "Derecho", "market_value_eur": "4500000"}, {"player_id": "206", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Tomás Palacios", "jersey_number": "3", "position": "Defensa Central", "nationality": "Argentina", "age": "22", "height_cm": "196", "foot": "Izquierdo", "market_value_eur": "5000000"}, {"player_id": "207", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Eros Mancuso", "jersey_number": "14", "position": "Lateral Derecho", "nationality": "Argentina", "age": "26", "height_cm": "175", "foot": "Derecho", "market_value_eur": "4000000"}, {"player_id": "208", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Eric Meza", "jersey_number": "20", "position": "Lateral Derecho", "nationality": "Argentina", "age": "26", "height_cm": "175", "foot": "Derecho", "market_value_eur": "2500000"}, {"player_id": "209", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Gastón Benedetti", "jersey_number": "13", "position": "Lateral Izquierdo", "nationality": "Argentina", "age": "24", "height_cm": "178", "foot": "Izquierdo", "market_value_eur": "3500000"}, {"player_id": "210", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Santiago Arzamendia", "jersey_number": "21", "position": "Lateral Izquierdo", "nationality": "Paraguay", "age": "27", "height_cm": "174", "foot": "Izquierdo", "market_value_eur": "3000000"}, {"player_id": "211", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "José Sosa", "jersey_number": "7", "position": "Mediocampista Central", "nationality": "Argentina", "age": "40", "height_cm": "179", "foot": "Derecho", "market_value_eur": "300000"}, {"player_id": "212", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Gabriel Neves", "jersey_number": "8", "position": "Mediocampista Central", "nationality": "Uruguay", "age": "28", "height_cm": "173", "foot": "Derecho", "market_value_eur": "2500000"}, {"player_id": "213", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Ezequiel Piovi", "jersey_number": "5", "position": "Mediocampista Defensivo", "nationality": "Argentina", "age": "33", "height_cm": "175", "foot": "Derecho", "market_value_eur": "1500000"}, {"player_id": "214", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Alexis Castro", "jersey_number": "16", "position": "Mediocampista Central", "nationality": "Argentina", "age": "31", "height_cm": "182", "foot": "Izquierdo", "market_value_eur": "2000000"}, {"player_id": "215", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Baltasar Rodríguez", "jersey_number": "10", "position": "Mediocampista Ofensivo", "nationality": "Argentina", "age": "22", "height_cm": "172", "foot": "Derecho", "market_value_eur": "5500000"}, {"player_id": "216", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Tiago Palacios", "jersey_number": "11", "position": "Mediocampista Ofensivo", "nationality": "Uruguay", "age": "24", "height_cm": "170", "foot": "Izquierdo", "market_value_eur": "7000000"}, {"player_id": "217", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Edwuin Cetré", "jersey_number": "18", "position": "Extremo", "nationality": "Colombia", "age": "28", "height_cm": "178", "foot": "Derecho", "market_value_eur": "4500000"}, {"player_id": "218", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Joaquín Correa", "jersey_number": "19", "position": "Segunda Punta", "nationality": "Argentina", "age": "31", "height_cm": "188", "foot": "Derecho", "market_value_eur": "4000000"}, {"player_id": "219", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Lucas Alario", "jersey_number": "23", "position": "Delantero Centro", "nationality": "Argentina", "age": "33", "height_cm": "185", "foot": "Derecho", "market_value_eur": "2500000"}, {"player_id": "220", "team_id": "2", "team_name": "Estudiantes de La Plata", "name": "Guido Carrillo", "jersey_number": "9", "position": "Delantero Centro", "nationality": "Argentina", "age": "34", "height_cm": "191", "foot": "Derecho", "market_value_eur": "2000000"}];
+    const ALL_STATS = [{"stat_id": "1", "player_id": "101", "player_name": "Weverton", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "13", "minutes_played": "1170", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "2", "player_id": "101", "player_name": "Weverton", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "0", "assists": "0", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "3", "player_id": "102", "player_name": "Carlos Miguel", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "4", "player_id": "102", "player_name": "Carlos Miguel", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "5", "player_id": "103", "player_name": "Gustavo Gómez", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "13", "minutes_played": "1170", "goals": "2", "assists": "0", "yellow_cards": "5", "red_cards": "1"}, {"stat_id": "6", "player_id": "103", "player_name": "Gustavo Gómez", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "2", "assists": "1", "yellow_cards": "4", "red_cards": "0"}, {"stat_id": "7", "player_id": "104", "player_name": "Murilo", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "8", "player_id": "104", "player_name": "Murilo", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "9", "player_id": "105", "player_name": "Bruno Fuchs", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "10", "player_id": "105", "player_name": "Bruno Fuchs", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "11", "player_id": "106", "player_name": "Joaquín Piquerez", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1020", "goals": "2", "assists": "4", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "12", "player_id": "106", "player_name": "Joaquín Piquerez", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "980", "goals": "2", "assists": "4", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "13", "player_id": "107", "player_name": "Jefté", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "14", "player_id": "107", "player_name": "Jefté", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "15", "player_id": "108", "player_name": "Agustín Giay", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "16", "player_id": "108", "player_name": "Agustín Giay", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "17", "player_id": "109", "player_name": "Khellven", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "18", "player_id": "109", "player_name": "Khellven", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "19", "player_id": "110", "player_name": "Aníbal Moreno", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "13", "minutes_played": "1110", "goals": "1", "assists": "2", "yellow_cards": "6", "red_cards": "0"}, {"stat_id": "20", "player_id": "110", "player_name": "Aníbal Moreno", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1030", "goals": "2", "assists": "3", "yellow_cards": "4", "red_cards": "0"}, {"stat_id": "21", "player_id": "111", "player_name": "Richard Ríos", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "940", "goals": "2", "assists": "3", "yellow_cards": "4", "red_cards": "0"}, {"stat_id": "22", "player_id": "111", "player_name": "Richard Ríos", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "880", "goals": "3", "assists": "3", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "23", "player_id": "112", "player_name": "Andreas Pereira", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "6", "minutes_played": "510", "goals": "2", "assists": "3", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "24", "player_id": "112", "player_name": "Andreas Pereira", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "950", "goals": "4", "assists": "5", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "25", "player_id": "113", "player_name": "Lucas Evangelista", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "26", "player_id": "113", "player_name": "Lucas Evangelista", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "27", "player_id": "114", "player_name": "Maurício", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "28", "player_id": "114", "player_name": "Maurício", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "29", "player_id": "115", "player_name": "Raphael Veiga", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "13", "minutes_played": "1080", "goals": "5", "assists": "5", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "30", "player_id": "115", "player_name": "Raphael Veiga", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1010", "goals": "4", "assists": "6", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "31", "player_id": "116", "player_name": "Felipe Anderson", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "880", "goals": "3", "assists": "4", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "32", "player_id": "116", "player_name": "Felipe Anderson", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "840", "goals": "3", "assists": "5", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "33", "player_id": "117", "player_name": "Facundo Torres", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "1", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "34", "player_id": "117", "player_name": "Facundo Torres", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "1", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "35", "player_id": "118", "player_name": "Vitor Roque", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "13", "minutes_played": "1040", "goals": "8", "assists": "2", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "36", "player_id": "118", "player_name": "Vitor Roque", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1020", "goals": "9", "assists": "3", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "37", "player_id": "119", "player_name": "José Manuel López (Flaco)", "team_name": "Palmeiras", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "850", "goals": "6", "assists": "2", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "38", "player_id": "119", "player_name": "José Manuel López (Flaco)", "team_name": "Palmeiras", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "890", "goals": "7", "assists": "2", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "39", "player_id": "201", "player_name": "Fernando Muslera", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "0", "assists": "0", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "40", "player_id": "201", "player_name": "Fernando Muslera", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "41", "player_id": "202", "player_name": "Fabricio Iacovich", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "42", "player_id": "202", "player_name": "Fabricio Iacovich", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "43", "player_id": "203", "player_name": "Leandro González Pírez", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "1", "assists": "1", "yellow_cards": "4", "red_cards": "0"}, {"stat_id": "44", "player_id": "203", "player_name": "Leandro González Pírez", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1080", "goals": "1", "assists": "1", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "45", "player_id": "204", "player_name": "Marcos Rojo", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "690", "goals": "1", "assists": "0", "yellow_cards": "4", "red_cards": "1"}, {"stat_id": "46", "player_id": "204", "player_name": "Marcos Rojo", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "10", "minutes_played": "880", "goals": "2", "assists": "0", "yellow_cards": "5", "red_cards": "0"}, {"stat_id": "47", "player_id": "205", "player_name": "Santiago Núñez", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "48", "player_id": "205", "player_name": "Santiago Núñez", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "49", "player_id": "206", "player_name": "Tomás Palacios", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "50", "player_id": "206", "player_name": "Tomás Palacios", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "0", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "51", "player_id": "207", "player_name": "Eros Mancuso", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "52", "player_id": "207", "player_name": "Eros Mancuso", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "53", "player_id": "208", "player_name": "Eric Meza", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "54", "player_id": "208", "player_name": "Eric Meza", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "55", "player_id": "209", "player_name": "Gastón Benedetti", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "56", "player_id": "209", "player_name": "Gastón Benedetti", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "57", "player_id": "210", "player_name": "Santiago Arzamendia", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "58", "player_id": "210", "player_name": "Santiago Arzamendia", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "59", "player_id": "211", "player_name": "José Sosa", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "740", "goals": "2", "assists": "6", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "60", "player_id": "211", "player_name": "José Sosa", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "10", "minutes_played": "680", "goals": "2", "assists": "5", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "61", "player_id": "212", "player_name": "Gabriel Neves", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "62", "player_id": "212", "player_name": "Gabriel Neves", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "63", "player_id": "213", "player_name": "Ezequiel Piovi", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "64", "player_id": "213", "player_name": "Ezequiel Piovi", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "65", "player_id": "214", "player_name": "Alexis Castro", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "8", "minutes_played": "560", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "66", "player_id": "214", "player_name": "Alexis Castro", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "630", "goals": "0", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "67", "player_id": "215", "player_name": "Baltasar Rodríguez", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "10", "minutes_played": "710", "goals": "3", "assists": "3", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "68", "player_id": "215", "player_name": "Baltasar Rodríguez", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "860", "goals": "4", "assists": "4", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "69", "player_id": "216", "player_name": "Tiago Palacios", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "980", "goals": "6", "assists": "5", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "70", "player_id": "216", "player_name": "Tiago Palacios", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1040", "goals": "6", "assists": "7", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "71", "player_id": "217", "player_name": "Edwuin Cetré", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "880", "goals": "4", "assists": "6", "yellow_cards": "4", "red_cards": "0"}, {"stat_id": "72", "player_id": "217", "player_name": "Edwuin Cetré", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "910", "goals": "5", "assists": "4", "yellow_cards": "3", "red_cards": "0"}, {"stat_id": "73", "player_id": "218", "player_name": "Joaquín Correa", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "640", "goals": "3", "assists": "3", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "74", "player_id": "218", "player_name": "Joaquín Correa", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "850", "goals": "5", "assists": "4", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "75", "player_id": "219", "player_name": "Lucas Alario", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "9", "minutes_played": "580", "goals": "3", "assists": "1", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "76", "player_id": "219", "player_name": "Lucas Alario", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "10", "minutes_played": "670", "goals": "4", "assists": "2", "yellow_cards": "1", "red_cards": "0"}, {"stat_id": "77", "player_id": "220", "player_name": "Guido Carrillo", "team_name": "Estudiantes de La Plata", "season": "2025", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "11", "minutes_played": "890", "goals": "7", "assists": "2", "yellow_cards": "2", "red_cards": "0"}, {"stat_id": "78", "player_id": "220", "player_name": "Guido Carrillo", "team_name": "Estudiantes de La Plata", "season": "2026", "competition": "Copa Libertadores & Torneos Oficiales", "matches_played": "12", "minutes_played": "1010", "goals": "8", "assists": "3", "yellow_cards": "2", "red_cards": "0"}];
+
+    let currentLeagueFilter = 'all';
+    let currentMatchdayFilter = 'all';
+
     function switchTab(tabId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-      const activeView = document.getElementById('view-' + tabId);
-      if (activeView) activeView.classList.remove('hidden');
+      const target = document.getElementById('view-' + tabId);
+      if (target) target.classList.remove('hidden');
 
       document.querySelectorAll('.nav-item').forEach(btn => {
         btn.classList.remove('active', 'bg-surface-container-high', 'text-on-surface');
         btn.classList.add('text-on-surface-variant');
       });
-      const activeBtn = document.getElementById('nav-btn-' + tabId);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-surface-container-high', 'text-on-surface');
-        activeBtn.classList.remove('text-on-surface-variant');
+      const navBtn = document.getElementById('nav-btn-' + tabId);
+      if (navBtn) {
+        navBtn.classList.add('active', 'bg-surface-container-high', 'text-on-surface');
+        navBtn.classList.remove('text-on-surface-variant');
+      }
+
+      if (tabId === 'partidos') {
+        renderMatchesGrid();
+      } else if (tabId === 'plantillas') {
+        renderRoster('Palmeiras');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function filterFutbol(category) {
-      document.querySelectorAll('.f-filter').forEach(btn => {
-        btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
-        btn.classList.add('bg-surface-container-high', 'text-on-surface');
+    function filterByLeague(league) {
+      currentLeagueFilter = league;
+      document.querySelectorAll('.league-btn').forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        b.classList.add('bg-surface-container-high', 'text-on-surface');
       });
-      const current = document.getElementById('btn-f-' + category);
-      if (current) {
-        current.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
-        current.classList.remove('bg-surface-container-high');
+      const activeBtn = document.getElementById('btn-filter-' + league);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        activeBtn.classList.remove('bg-surface-container-high');
       }
 
-      const cardLib = document.getElementById('card-libertadores-featured');
-      const cardUcl = document.getElementById('card-ucl-table');
-
-      if (category === 'libertadores') {
-        cardLib.style.display = 'block';
-        cardUcl.style.display = 'none';
-      } else if (category === 'ucl') {
-        cardLib.style.display = 'none';
-        cardUcl.style.display = 'block';
+      const uclBar = document.getElementById('ucl-matchday-bar');
+      if (league === 'Champions' || league === 'all') {
+        uclBar.style.display = 'flex';
       } else {
-        cardLib.style.display = 'block';
-        cardUcl.style.display = 'block';
+        uclBar.style.display = 'none';
       }
+
+      renderMatchesGrid();
     }
 
-    function openModalMatch(type) {
-      const modal = document.getElementById('telemetry-modal');
-      const title = document.getElementById('modal-title');
-      const body = document.getElementById('modal-body');
-
-      if (type === 'final-libertadores') {
-        title.innerText = 'Copa Libertadores 2026: Gran Final';
-        body.innerHTML = `
-          <div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-2">
-            <span class="text-primary font-bold text-sm">SE Palmeiras vs Club Estudiantes de La Plata</span>
-            <span class="text-on-surface-variant">Sede Única Conmebol · Temporada 2026</span>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="bg-surface-container-high p-3 rounded">
-              <span class="text-on-surface-variant block">Figura Palmeiras:</span>
-              <span class="text-secondary font-bold text-sm">Vitor Roque (9 goles en Libertadores)</span>
-              <span class="text-[11px] block text-on-surface-variant mt-1">Dorsal 19 · Valor: €30M</span>
-            </div>
-            <div class="bg-surface-container-high p-3 rounded">
-              <span class="text-on-surface-variant block">Figura Estudiantes:</span>
-              <span class="text-primary font-bold text-sm">Guido Carrillo (8 goles en Libertadores)</span>
-              <span class="text-[11px] block text-on-surface-variant mt-1">Dorsal 9 · Capitán de ataque</span>
-            </div>
-          </div>
-          <div class="bg-surface-container-low p-3 rounded flex flex-col gap-1.5">
-            <span class="text-secondary font-bold">Model Telemetry Insights:</span>
-            <p class="text-on-surface-variant leading-relaxed">
-              Estudiantes llega tras vencer a Flamengo en semifinales (global 3-2). Palmeiras eliminó a Boca Juniors (2-0 global). Partido de máxima paridad táctica con expectativa de menos de 2.5 goles.
-            </p>
-          </div>
-        `;
-      } else if (type === 'el-clasico') {
-        title.innerText = 'El Clásico: Real Madrid vs FC Barcelona';
-        body.innerHTML = `
-          <div class="bg-surface-container-low p-4 rounded-lg flex flex-col gap-2">
-            <span class="text-tertiary font-bold text-sm">Santiago Bernabéu · LaLiga EA Sports</span>
-            <span class="text-on-surface-variant">Promedios últimos 10 partidos oficiales</span>
-          </div>
-          <div class="grid grid-cols-2 gap-3 text-center">
-            <div class="bg-surface-container-high p-3 rounded">
-              <span class="text-xs text-on-surface-variant">Real Madrid</span>
-              <span class="text-xl font-bold text-secondary block mt-1">2.45 xG</span>
-            </div>
-            <div class="bg-surface-container-high p-3 rounded">
-              <span class="text-xs text-on-surface-variant">FC Barcelona</span>
-              <span class="text-xl font-bold text-primary block mt-1">2.80 xG</span>
-            </div>
-          </div>
-        `;
-      }
-      modal.classList.remove('hidden');
+    function filterByMatchday(mday) {
+      currentMatchdayFilter = mday;
+      document.querySelectorAll('.mday-btn').forEach(b => {
+        b.classList.remove('active', 'bg-surface-container-high', 'text-on-surface', 'font-bold');
+        b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+      event.target.classList.add('active', 'bg-surface-container-high', 'text-on-surface', 'font-bold');
+      event.target.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+      renderMatchesGrid();
     }
 
-    function openModalAnalyze() {
-      const modal = document.getElementById('telemetry-modal');
-      const title = document.getElementById('modal-title');
-      const body = document.getElementById('modal-body');
+    function filterMatches() {
+      renderMatchesGrid();
+    }
 
-      title.innerText = 'Simulador Predictivo Cuantitativo (xG Engine)';
-      body.innerHTML = `
-        <p class="text-on-surface-variant leading-relaxed">
-          Ingresa cualquier partido para ejecutar 10,000 iteraciones estocásticas basadas en posesión, tiros al arco e índice de presión defensiva.
-        </p>
-        <div class="bg-surface-container-high p-4 rounded-lg flex flex-col gap-2">
-          <label class="text-xs text-on-surface-variant">Seleccionar Partido:</label>
-          <select class="bg-surface-container border border-outline-variant text-xs text-on-surface p-2 rounded">
-            <option>Palmeiras vs Estudiantes de La Plata (Final Libertadores 2026)</option>
-            <option>Liverpool vs Barcelona (Champions League)</option>
-            <option>Real Madrid vs Arsenal (Champions League)</option>
-          </select>
-          <div class="mt-3 p-3 bg-surface-container-lowest rounded text-secondary font-bold">
-            Simulación Monte Carlo completada: 52% Prob. Local / 48% Prob. Visita
+    function renderMatchesGrid() {
+      const container = document.getElementById('matches-grid');
+      const counter = document.getElementById('matches-counter');
+      const searchVal = document.getElementById('live-search-input').value.toLowerCase().trim();
+
+      let filtered = ALL_MATCHES.filter(m => {
+        // League Filter
+        if (currentLeagueFilter !== 'all' && !m.comp.toLowerCase().includes(currentLeagueFilter.toLowerCase())) {
+          return false;
+        }
+        // Matchday Filter
+        if (currentMatchdayFilter !== 'all' && m.stage !== currentMatchdayFilter) {
+          return false;
+        }
+        // Search Filter
+        if (searchVal) {
+          const matchStr = (m.home + ' ' + m.away + ' ' + m.comp + ' ' + m.stage).toLowerCase();
+          if (!matchStr.includes(searchVal)) return false;
+        }
+        return true;
+      });
+
+      counter.innerText = `Mostrando ${filtered.length} partidos de 152`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-on-surface-variant font-mono">
+            No se encontraron partidos con el criterio de búsqueda actual.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const isFinal = m.status === 'GRAN FINAL';
+        const borderColor = isFinal ? 'border-primary' : 'border-outline-variant hover:border-secondary/50';
+        return `
+          <div onclick="openMatchModal('${m.id}')" class="bg-surface-container border ${borderColor} rounded-xl p-5 flex flex-col gap-3.5 cursor-pointer hover:bg-surface-container-high transition-all shadow-md group">
+            <div class="flex items-center justify-between text-[11px] font-mono">
+              <span class="px-2 py-0.5 rounded ${isFinal ? 'bg-primary-container text-on-primary-container font-bold' : 'bg-surface-container-lowest text-on-surface-variant'} uppercase">
+                ${m.comp} · ${m.stage}
+              </span>
+              <span class="text-on-surface-variant">${m.date}</span>
+            </div>
+
+            <div class="flex items-center justify-between py-1">
+              <div class="flex flex-col flex-1 pr-2">
+                <span class="font-headline font-bold text-sm text-on-surface group-hover:text-primary transition-colors truncate">${m.home}</span>
+                <span class="text-[10px] font-mono text-on-surface-variant">xG ${m.xg_home}</span>
+              </div>
+              <div class="px-3 py-1 bg-surface-container-lowest rounded-md font-headline font-black text-base tabular-nums border border-outline-variant">
+                ${m.home_score} - ${m.away_score}
+              </div>
+              <div class="flex flex-col flex-1 pl-2 text-right">
+                <span class="font-headline font-bold text-sm text-on-surface group-hover:text-primary transition-colors truncate">${m.away}</span>
+                <span class="text-[10px] font-mono text-on-surface-variant">xG ${m.xg_away}</span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-outline-variant/50 flex items-center justify-between text-[11px] font-mono">
+              <span class="${isFinal ? 'text-primary font-bold' : 'text-secondary'}">${m.status}</span>
+              <span class="text-on-surface-variant group-hover:text-on-surface">Ver telemetría →</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderHomeFeatured() {
+      const container = document.getElementById('home-featured-grid');
+      // Show Copa Libertadores Final + El Clásico / Top UCL matches
+      const featured = [
+        ALL_MATCHES.find(m => m.id === 'lib-6'), // Final Libertadores 2026
+        ALL_MATCHES.find(m => m.id === 'lib-5'), // Semifinal Vuelta Flamengo vs Estudiantes
+        ALL_MATCHES.find(m => m.home === 'Real Madrid' && m.away.includes('Dortmund')) || ALL_MATCHES[4]
+      ].filter(Boolean);
+
+      container.innerHTML = featured.map(m => `
+        <div onclick="openMatchModal('${m.id}')" class="bg-surface-container border border-outline-variant hover:border-primary/50 transition-all rounded-xl p-5 flex flex-col gap-4 cursor-pointer group shadow-lg">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container text-[10px] font-mono font-bold uppercase">${m.comp}</span>
+            <span class="text-xs font-mono text-secondary font-semibold">${m.status}</span>
+          </div>
+          <div class="flex items-center justify-between py-1">
+            <div class="flex flex-col">
+              <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">${m.home}</span>
+              <span class="text-xs font-mono text-on-surface-variant">xG: ${m.xg_home}</span>
+            </div>
+            <div class="px-3 py-1 bg-surface-container-lowest rounded-md font-headline font-black text-lg border border-outline-variant">
+              ${m.home_score} - ${m.away_score}
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="font-headline text-base font-bold text-on-surface group-hover:text-primary transition-colors">${m.away}</span>
+              <span class="text-xs font-mono text-on-surface-variant">xG: ${m.xg_away}</span>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-outline-variant flex items-center justify-between text-xs font-mono text-on-surface-variant">
+            <span>${m.stage}</span>
+            <span class="text-secondary font-bold">Ver análisis completo →</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderRoster(teamName) {
+      document.querySelectorAll('.roster-filter').forEach(b => {
+        b.classList.remove('bg-secondary', 'text-on-secondary', 'bg-primary-container', 'text-on-primary-container');
+        b.classList.add('bg-surface-container-high', 'text-on-surface');
+      });
+
+      if (teamName.includes('Palmeiras')) {
+        const b = document.getElementById('btn-roster-palmeiras');
+        b.classList.add('bg-secondary', 'text-on-secondary');
+        b.classList.remove('bg-surface-container-high');
+      } else {
+        const b = document.getElementById('btn-roster-estudiantes');
+        b.classList.add('bg-primary-container', 'text-on-primary-container');
+        b.classList.remove('bg-surface-container-high');
+      }
+
+      const container = document.getElementById('roster-grid');
+      const teamPlayers = ALL_PLAYERS.filter(p => p.team_name.toLowerCase().includes(teamName.toLowerCase().split(' ')[0]));
+
+      container.innerHTML = teamPlayers.map(p => {
+        const stat2025 = ALL_STATS.find(s => s.player_name === p.name && s.season === '2025');
+        const stat2026 = ALL_STATS.find(s => s.player_name === p.name && s.season === '2026');
+        const g2026 = stat2026 ? stat2026.goals : 0;
+        const a2026 = stat2026 ? stat2026.assists : 0;
+        const pj2026 = stat2026 ? stat2026.matches_played : 0;
+
+        return `
+          <div class="bg-surface-container border border-outline-variant rounded-xl p-5 flex flex-col gap-3 shadow-md hover:border-outline transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full bg-surface-container-highest font-mono text-xs font-bold flex items-center justify-center text-secondary">
+                #${p.jersey_number}
+              </span>
+              <span class="text-xs font-mono text-on-surface-variant">€${Number(p.market_value_eur).toLocaleString()}</span>
+            </div>
+            <div>
+              <h4 class="font-headline text-base font-bold text-on-surface">${p.name}</h4>
+              <p class="text-xs text-on-surface-variant">${p.position} · ${p.nationality} · ${p.age} años</p>
+            </div>
+            <div class="pt-3 border-t border-outline-variant grid grid-cols-3 gap-2 text-center text-xs font-mono bg-surface-container-lowest p-2 rounded-lg">
+              <div><span class="text-[10px] text-on-surface-variant block">PJ 2026</span><span class="font-bold text-on-surface">${pj2026}</span></div>
+              <div><span class="text-[10px] text-on-surface-variant block">Goles</span><span class="font-bold text-primary">${g2026}</span></div>
+              <div><span class="text-[10px] text-on-surface-variant block">Asist.</span><span class="font-bold text-secondary">${a2026}</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openMatchModal(matchId) {
+      const m = ALL_MATCHES.find(item => item.id === matchId);
+      if (!m) return;
+
+      document.getElementById('modal-match-title').innerText = `${m.home} vs ${m.away}`;
+      document.getElementById('modal-match-stage').innerText = `${m.comp} · ${m.stage} · ${m.date}`;
+
+      const isFinal = m.stage.includes('FINAL');
+      let bodyHtml = `
+        <div class="grid grid-cols-3 items-center text-center bg-surface-container-lowest p-5 rounded-xl border border-outline-variant">
+          <div>
+            <span class="font-headline font-bold text-lg text-on-surface block">${m.home}</span>
+            <span class="text-xs font-mono text-secondary">xG ${m.xg_home}</span>
+          </div>
+          <div class="font-headline text-3xl font-black text-primary">
+            ${m.home_score} - ${m.away_score}
+          </div>
+          <div>
+            <span class="font-headline font-bold text-lg text-on-surface block">${m.away}</span>
+            <span class="text-xs font-mono text-tertiary">xG ${m.xg_away}</span>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-high p-4 rounded-xl flex flex-col gap-2">
+          <span class="text-xs font-mono text-on-surface-variant uppercase">Sede y Detalles:</span>
+          <p class="text-xs font-body text-on-surface"><strong>Estadio:</strong> ${m.venue}</p>
+          ${m.scorers ? `<p class="text-xs font-body text-primary"><strong>Goles / Incidencias:</strong> ${m.scorers}</p>` : ''}
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+          <div class="bg-surface-container-low p-3 rounded-lg flex flex-col gap-1">
+            <span class="text-on-surface-variant">Probabilidad Modelo v4.2:</span>
+            <span class="text-secondary font-bold text-sm">${isFinal ? '52% - 48% (Empate técnico)' : (m.home_score > m.away_score ? '68% Victoria Local' : '55% Cerrado')}</span>
+          </div>
+          <div class="bg-surface-container-low p-3 rounded-lg flex flex-col gap-1">
+            <span class="text-on-surface-variant">Estado del partido:</span>
+            <span class="text-primary font-bold text-sm">${m.status}</span>
           </div>
         </div>
       `;
-      modal.classList.remove('hidden');
+
+      document.getElementById('modal-match-body').innerHTML = bodyHtml;
+      document.getElementById('match-modal').classList.remove('hidden');
     }
 
-    function closeModal() {
-      document.getElementById('telemetry-modal').classList.add('hidden');
+    function closeMatchModal() {
+      document.getElementById('match-modal').classList.add('hidden');
     }
 
-    function handleSearch(val) {
-      if (!val) return;
-      const lower = val.toLowerCase();
-      if (lower.includes('estudiantes') || lower.includes('palmeiras') || lower.includes('libertadores')) {
-        switchTab('futbol');
-        filterFutbol('libertadores');
-      } else if (lower.includes('champions') || lower.includes('ucl') || lower.includes('madrid') || lower.includes('barca')) {
-        switchTab('futbol');
-        filterFutbol('ucl');
-      } else if (lower.includes('nba') || lower.includes('celtics')) {
-        switchTab('nba');
-      }
-    }
+    // Initial render on boot
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHomeFeatured();
+      renderMatchesGrid();
+    });
   </script>
 </body>
 </html>
